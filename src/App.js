@@ -1,23 +1,37 @@
-import React from "react";
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Header from "./components/Header";
+import Home from "./pages/Home";
 import Logistics from "./pages/Logistics";
-import History from "./pages/History";
+import Backlog from "./pages/Backlog";
+import Footer from './components/Footer';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+
   return (
     <Router>
-      <Header />
+      <Header isLoggedIn={isLoggedIn} user={user} />
 
       <main style={{ padding: "20px" }}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route
+            path="/"
+            element={
+              <Home
+                isLoggedIn={isLoggedIn}
+                setIsLoggedIn={setIsLoggedIn}
+                setUser={setUser}
+              />
+            }
+          />
           <Route path="/logistics" element={<Logistics />} />
-          <Route path="/history" element={<History />} />
+          <Route path="/backlog" element={<Backlog />} />
         </Routes>
       </main>
+      <Footer />
     </Router>
   );
 }
