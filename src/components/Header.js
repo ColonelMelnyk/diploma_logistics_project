@@ -1,6 +1,17 @@
-import { Link } from "react-router-dom";
+// src/components/Header.js
+import React, { useState } from "react";
 
-const Header = ({ isLoggedIn, user }) => {
+const Header = () => {
+  // Фейковий стан користувача
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Тимчасові дані користувача
+  const user = {
+    nickname: "User123",
+    avatar:
+      "https://via.placeholder.com/40" // заглушка-аватарка
+  };
+
   return (
     <header
       style={{
@@ -11,17 +22,20 @@ const Header = ({ isLoggedIn, user }) => {
         alignItems: "center"
       }}
     >
+      {/* Навігація */}
       <nav style={{ display: "flex", gap: "15px" }}>
-        <Link to="/"><button>Головна</button></Link>
-        <Link to="/logistics"><button>Логістика</button></Link>
-        <Link to="/history"><button>Історія операцій</button></Link>
+        <button>Головна</button>
+        <button>Сторінка 1</button>
+        <button>Сторінка 2</button>
       </nav>
 
+      {/* Перемикач теми */}
       <button>Тема</button>
 
+      {/* Стан акаунта */}
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         {!isLoggedIn ? (
-          <span>Гість</span>
+          <button onClick={() => setIsLoggedIn(true)}>Увійти</button>
         ) : (
           <>
             <img
