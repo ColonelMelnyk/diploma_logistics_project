@@ -24,7 +24,6 @@ const dispatch = useDispatch();
     }
   return (
     <>
-    <Button onClick={() => setOpenModal(true)}>Toggle modal</Button>
     <Modal show={openModal} size="md" onClose={onCloseModal} onSubmit={handleSubmit} autoComplete="off">
         <ModalHeader />
         <ModalBody>
@@ -60,3 +59,5 @@ const dispatch = useDispatch();
   );
 }
 export default LoginForm
+
+// <Button onClick={() => setOpenModal(true)}>Toggle modal</Button>

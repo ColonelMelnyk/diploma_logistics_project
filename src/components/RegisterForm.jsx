@@ -25,7 +25,6 @@ export const RegisterForm = () => {
 
   return (
     <>
-    <Button onClick={() => setOpenModal(true)}>Toggle modal</Button>
       <Modal show={openModal} size="md" onClose={onCloseModal} onSubmit={handleSubmit} autoComplete="off">
         <ModalHeader />
         <ModalBody>
@@ -72,3 +71,5 @@ export const RegisterForm = () => {
   );
 }
 export default RegisterForm
+
+//<Button onClick={() => setOpenModal(true)}>Toggle modal</Button>
