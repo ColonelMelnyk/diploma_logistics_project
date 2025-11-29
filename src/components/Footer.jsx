@@ -7,7 +7,6 @@ const Footer = () => {
     <footer>
       <div>
         <div>
-          {/* Лого */}
           <div>
             <a href="/" >
               Tech<span>Speed</span>
@@ -15,12 +14,10 @@ const Footer = () => {
           </div>
 
           <p>
-            Increase the flow of customers and sales for your business
-            with digital logistics and growth solutions.
+            Placeholder
           </p>
         </div>
 
-        {/* Соцмережі */}
         <div>
           <h3>Social Media</h3>
           <ul>
@@ -74,8 +71,6 @@ const Footer = () => {
           </ul>
         </div>
       </div>
-
-      {/* Copyright */}
       <div>
         <p>© {currentYear} TechSpeed® — All rights reserved.</p>
       </div>
