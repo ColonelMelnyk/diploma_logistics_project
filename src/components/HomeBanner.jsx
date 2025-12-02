@@ -6,8 +6,8 @@ const HomeBanner = () => {
       <h1>
         TECHSPEED LOGISTIC SYSTEM
       </h1>
-      <button type="button" name="order_service">
-        Logistics Center
+      <button type="button" name="login">
+        ЛОГІСТИЧНИЙ ЦЕНТР
       </button>
     </div>
   </div>

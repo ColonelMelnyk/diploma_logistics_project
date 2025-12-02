@@ -38,12 +38,12 @@ const Header = () => {
         </Link>
         <Link to="/logistics">
           <button className="text-[28px] opacity-80 dark:text-white">
-            Logistics
+            Логістика
           </button>
         </Link>
         <Link to="/history">
           <button className="text-[28px] opacity-80 dark:text-white">
-            History
+            Звіт
           </button>
         </Link>
       </div>
@@ -54,12 +54,12 @@ const Header = () => {
           <div className = "flex gap-[8px] flex-col">
           <Link to="/login">
             <button className="text-[28px] opacity-80 dark:text-white">
-              Login
+              Логін
             </button>
           </Link>
           <Link to="/register">
             <button className="text-[28px] opacity-80 dark:text-white">
-              Register
+              Реєстрація
             </button>
           </Link> 
           </div>
