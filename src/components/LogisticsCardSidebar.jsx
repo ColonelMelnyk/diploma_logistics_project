@@ -7,13 +7,12 @@ const LogisticsCardSidebar = ({
   onRefillSingle,
   onRefillAll
 }) => {
-  if (!store) return null; // якщо магазин не вибрано
+  if (!store) return null; 
 
-  // Додаємо базові (не стилізовані) класи для slide-in справа:
   const sidebarStyle = {
     position: "fixed",
     top: 0,
-    right: isOpen ? 0 : "-400px", // робить появу справа
+    right: isOpen ? 0 : "-400px", 
     width: "400px",
     height: "100vh",
     background: "#fff",
@@ -26,38 +25,25 @@ const LogisticsCardSidebar = ({
 
   return (
     <aside style={sidebarStyle}>
-      {/* Кнопка закриття */}
       <button type="button" onClick={onClose}>
         Закрити
       </button>
-
-      {/* Зображення магазину */}
       <div>
         <img src={store.image} alt={store.name} width="100%" />
       </div>
-
-      {/* Назва магазину */}
       <h2>{store.name}</h2>
-
-      {/* Адреса магазину */}
       <p>
         <strong>Адреса:</strong><br />
         {store.address}
       </p>
-
-      {/* Контакти магазину */}
       <p>
         <strong>Контакти:</strong><br />
         Тел: {store.phone}<br />
         Email: {store.email}
       </p>
-
-      {/* Список товарів */}
       <div>
         <h3>Товари в магазині</h3>
-
         <ul>
-
           <li>
             Комп'ютери: {store.computers}/100
             <button onClick={() => onRefillSingle(store.id, "computers")}>
@@ -78,11 +64,8 @@ const LogisticsCardSidebar = ({
               Поповнити
             </button>
           </li>
-
         </ul>
       </div>
-
-      {/* Поповнення всіх трьох товарів */}
       <button
         type="button"
         onClick={() => onRefillAll(store.id)}
