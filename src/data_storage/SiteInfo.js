@@ -1,4 +1,3 @@
-// SiteInfo.js
 
 const siteInfoData = [
   {

@@ -1,4 +1,4 @@
-const LogisticsCard = ({ store, onOpen, onRefillAll }) => {
+const LogisticsCard = ({ store, onOpen, onRefill }) => {
   return (
     <li>
       <article>
@@ -18,7 +18,7 @@ const LogisticsCard = ({ store, onOpen, onRefillAll }) => {
           <button type="button" onClick={() => onOpen(store.id)}>
             Відкрити
           </button>
-          <button type="button" onClick={() => onRefillAll(store.id)}>
+          <button type="button" onClick={() => onRefill(store.id)}>
             Поповнити
           </button>
         </div>
