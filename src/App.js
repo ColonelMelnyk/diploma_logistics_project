@@ -4,7 +4,7 @@ import './App.css';
 import { Layout } from "./components/Layout";
 import Home from "./pages/Home"
 //import Logistics from "./pages/Logistics"
-import History from "./pages/History"
+//import History from "./pages/History"
 
 function App() {
   return (
@@ -16,7 +16,8 @@ function App() {
        {
        // <Route path = "/logistics" element = {<Logistics/>}/> 
        } 
-        <Route path = "/history" element = {<History/>}/>
+        { //<Route path = "/history" element = {<History/>}/>
+        }
       </Routes>
       </main>
     </Router>

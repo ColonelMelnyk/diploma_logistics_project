@@ -1,22 +1,50 @@
  import React from "react";
- import stores from "../data_storage/StoreData"; 
+import { useSelector } from "react-redux";
+import { selectRefillHistory } from "../redux/logisticsHistory/LogisticsHistorySelectors";
 
-const LogisticsInfo = () => {
+const LogisticsInfo = ({ warehouse, stores }) => {
+
+  const refillHistory = useSelector(selectRefillHistory);
+
+  //const lastEntry = refillHistory.at(-1);
+
+  const lastStoreRefill = [...refillHistory]
+    .reverse()
+    .find((entry) => entry.type === "store");
+
+  const msLeft = warehouse.nextArrival - Date.now();
+  const minutesLeft = Math.max(0, Math.floor(msLeft / 60000));
+
   return (
     <section>
       <h1>TECHSPEED</h1>
       <h2>Загальний статус</h2>
+
       <div>
-        <p>Комп'ютери: PLACEHOLDER / PLACEHOLDER</p>
-        <p>Телефони та планшети: PLACEHOLDER / PLACEHOLDER</p>
-        <p>Аксесуари: PLACEHOLDER / PLACEHOLDER</p>
+        <p>Комп'ютери: {warehouse.computers} / 700</p>
+        <p>Телефони та планшети: {warehouse.phones_tablets} / 2100</p>
+        <p>Аксесуари: {warehouse.accessories} / 7000</p>
       </div>
+
       <div>
-        <p>Час з останнього прибуття товарів на склад: PLACEHOLDER</p>
-        <p>Час до наступного прибуття товарів на склад: PLACEHOLDER</p>
-        <p>Час з останньої відправки товарів у магазин: PLACEHOLDER</p>
-        <p>Останній поповнений магазин: PLACEHOLDER</p>
+        <p>
+          Час з останнього прибуття на склад:{" "}
+          {warehouse.lastArrival ?? "немає даних"}
+        </p>
+
+        <p>Час до наступного прибуття: {minutesLeft} хв</p>
+
+        <p>
+          Час з останньої відправки у магазин:{" "}
+          {lastStoreRefill ? new Date(lastStoreRefill.time).toLocaleTimeString() : "немає даних"}
+        </p>
+
+        <p>
+          Останній поповнений магазин:{" "}
+          {lastStoreRefill ? lastStoreRefill.store : "немає даних"}
+        </p>
       </div>
+
       <div>
         <h3>Магазини</h3>
         <ul>
@@ -29,9 +57,9 @@ const LogisticsInfo = () => {
           ))}
         </ul>
       </div>
-
     </section>
   );
 };
 
 export default LogisticsInfo;
+

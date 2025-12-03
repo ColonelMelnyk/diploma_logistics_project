@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import storeList from "../data_storage/StoreData";
+import { useDispatch } from "react-redux";
+import { addWarehouseRefill, addStoreRefill } from "../redux/logisticsHistory/LogisticsHistorySlice";
 import { WAREHOUSE_CAPACITY, STORE_CAPACITY } from "../data_storage/Capacities";
-import LogisticsInfo from "../components/LogisticsInfo";
-import LogisticsGrid from "../components/LogisticsGrid";
-import LogisticsCardSidebar from "../components/LogisticsCardSidebar";
+import  { LogisticsInfo } from "../components/LogisticsInfo";
+import { LogisticsGrid } from "../components/LogisticsGrid";
+import  { LogisticsCardSidebar } from "../components/LogisticsCardSidebar";
 
 function initStore(store) {
   return {
@@ -29,30 +31,39 @@ function randomPercent(min, max) {
 }
 
 const Logistics = () => {
+  const dispatch = useDispatch();
   const [warehouse, setWarehouse] = useState(initWarehouse());
   const [stores, setStores] = useState(storeList.map(initStore));
-
-  const [refillHistory, setRefillHistory] = useState([]);
 
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [selectedStore, setSelectedStore] = useState(null);
 
   const refillWarehouse = () => {
-    const newWarehouse = { ...warehouse };
+  const newWarehouse = { ...warehouse };
 
-    for (let key of ["computers", "phones_tablets", "accessories"]) {
-      const capacity = WAREHOUSE_CAPACITY[key];
-      const add = Math.floor(capacity * (randomPercent(10, 20) / 100));
-      newWarehouse[key] = Math.min(newWarehouse[key] + add, capacity);
-    }
-
-    newWarehouse.lastArrival = new Date().toLocaleTimeString();
-    newWarehouse.nextArrival = Date.now() + 5 * 60 * 1000;
-
-    setWarehouse(newWarehouse);
+  const added = {
+    computers: 0,
+    phones_tablets: 0,
+    accessories: 0,
   };
 
-  
+  for (let key of ["computers", "phones_tablets", "accessories"]) {
+    const capacity = WAREHOUSE_CAPACITY[key];
+    const add = Math.floor(capacity * (randomPercent(10, 20) / 100));
+    added[key] = add;
+
+    newWarehouse[key] = Math.min(newWarehouse[key] + add, capacity);
+  }
+  newWarehouse.lastArrival = new Date().toLocaleTimeString();
+  newWarehouse.nextArrival = Date.now() + 5 * 60 * 1000;
+
+ dispatch(addWarehouseRefill(added));
+
+
+  setWarehouse(newWarehouse);
+};
+
+
   const simulateSales = () => {
     const newStores = stores.map((s) => {
       return {
@@ -96,16 +107,10 @@ const Logistics = () => {
         accessories:
           STORE_CAPACITY.accessories - s.accessories,
       };
-
-      // ЛОГ поповнення
-      setRefillHistory((prev) => [
-        ...prev,
-        {
-          store: s.name,
-          time: new Date().toLocaleTimeString(),
-          details: refill,
-        },
-      ]);
+      dispatch(addStoreRefill({
+        store: s.name,
+        details: refill
+      }));
 
       return {
         ...s,
@@ -123,18 +128,11 @@ const Logistics = () => {
   const handleRefillSingle = (storeId, category) => {
     const newStores = stores.map((s) => {
       if (s.id !== storeId) return s;
-
       const refillAmount = STORE_CAPACITY[category] - s[category];
-
-      setRefillHistory((prev) => [
-        ...prev,
-        {
-          store: s.name,
-          time: new Date().toLocaleTimeString(),
-          details: { [category]: refillAmount },
-        },
-      ]);
-
+      dispatch(addStoreRefill({
+        store: s.name,
+        details: { [category]: refillAmount }
+      }));
       return {
         ...s,
         [category]: STORE_CAPACITY[category],
@@ -166,7 +164,7 @@ const Logistics = () => {
 
   return (
     <section>
-      <LogisticsInfo warehouse={warehouse} stores={stores} refillHistory={refillHistory} />
+      <LogisticsInfo warehouse={warehouse} stores={stores} />
 
       <LogisticsGrid
         onOpen={handleOpenSidebar}
