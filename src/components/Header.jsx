@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react";
+import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../redux/AuthLogicSelectors"
 import { IoIosSunny, IoIosMoon } from "react-icons/io";
 import { Link } from "react-router-dom";

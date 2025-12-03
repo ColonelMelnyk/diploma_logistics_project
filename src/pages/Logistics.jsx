@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import storeList from "../data_storage/StoreData";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setWarehouseState } from "../redux/warehouse/warehouseSlice";
 import { addWarehouseRefill, addStoreRefill } from "../redux/logisticsHistory/LogisticsHistorySlice";
 import { WAREHOUSE_CAPACITY, STORE_CAPACITY } from "../data_storage/Capacities";
 import  { LogisticsInfo } from "../components/LogisticsInfo";
@@ -32,15 +33,19 @@ function randomPercent(min, max) {
 
 const Logistics = () => {
   const dispatch = useDispatch();
-  const [warehouse, setWarehouse] = useState(initWarehouse());
+  const warehouse = useSelector((state) => state.warehouse);
   const [stores, setStores] = useState(storeList.map(initStore));
 
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [selectedStore, setSelectedStore] = useState(null);
-
+  useEffect(() => {
+    dispatch(setWarehouseState(initWarehouse()));
+  },
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+   []);
   const refillWarehouse = () => {
   const newWarehouse = { ...warehouse };
-
+    
   const added = {
     computers: 0,
     phones_tablets: 0,
@@ -58,9 +63,8 @@ const Logistics = () => {
   newWarehouse.nextArrival = Date.now() + 5 * 60 * 1000;
 
  dispatch(addWarehouseRefill(added));
+ dispatch(setWarehouseState(newWarehouse));
 
-
-  setWarehouse(newWarehouse);
 };
 
 
@@ -167,6 +171,7 @@ const Logistics = () => {
       <LogisticsInfo warehouse={warehouse} stores={stores} />
 
       <LogisticsGrid
+        stores={stores}
         onOpen={handleOpenSidebar}
         onRefill={handleRefillAll}
       />
