@@ -27,7 +27,7 @@ const dispatch = useDispatch();
     <Modal show={openModal} size="md" onClose={onCloseModal} onSubmit={handleSubmit} autoComplete="off">
         <ModalHeader />
         <ModalBody>
-          <div className="space-y-6">
+          <form className="space-y-6" >
             <h3 className="text-xl font-medium text-gray-900 dark:text-white">Sign in to our platform</h3>
             <div>
               <div className="mb-2 block">
@@ -37,6 +37,7 @@ const dispatch = useDispatch();
                 type= "email"
                 name= "email"
                 placeholder="name@company.com"
+                autoComplete="email"
                 required
               />
             </div>
@@ -47,12 +48,13 @@ const dispatch = useDispatch();
               <TextInput 
               name="password" 
               type="password" 
+              autoComplete="current-password"
               required />
             </div>
             <div className="w-full">
               <Button>Log in </Button>
             </div>
-          </div>
+          </form>
         </ModalBody>
       </Modal>
       </>
