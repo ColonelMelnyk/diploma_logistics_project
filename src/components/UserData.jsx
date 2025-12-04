@@ -1,6 +1,6 @@
-import { logOut } from 'redux/AuthLogic';
+import { logOut } from '../redux/AuthLogic';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser } from 'redux/AuthLogicSelectors';
+import  { selectUser } from '../redux/AuthLogicSelectors';
 import { useNavigate } from "react-router-dom";
 
 const UserData = () => {

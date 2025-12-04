@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../redux/AuthLogicSelectors"
 import { IoIosSunny, IoIosMoon } from "react-icons/io";
 import { Link } from "react-router-dom";
-import { UserData } from "./UserData";
-import { RegisterSection } from "./RegisterSection"
+import UserData from "./UserData";
+import RegisterSection from "./RegisterSection"
 const Header = () => {
    const isLoggedIn = useSelector(selectIsLoggedIn);
    const [darkMode, setDarkMode] = React.useState(

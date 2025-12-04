@@ -1,4 +1,4 @@
-import LogisticsCard from "../LogisticsCard/LogisticsCard";
+import LogisticsCard from "../components/LogisticsCard";
 
 const LogisticsGrid = ({ stores, onOpen, onRefill }) => {
   return (

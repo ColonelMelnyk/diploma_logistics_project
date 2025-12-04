@@ -1,2 +1,4 @@
-export const selectRefillHistory = (state) =>
+const selectRefillHistory = (state) =>
   state.logisticsHistory.history;
+
+export default selectRefillHistory;

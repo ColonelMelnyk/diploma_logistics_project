@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import storeList from "../data_storage/StoreData";
 import { useDispatch, useSelector } from "react-redux";
-import { setWarehouseState } from "../redux/warehouse/warehouseSlice";
-import { addWarehouseRefill, addStoreRefill } from "../redux/logisticsHistory/LogisticsHistorySlice";
+import setWarehouseState from "../redux/WarehouseSlice";
+import { addWarehouseRefill, addStoreRefill } from "../redux/LogisticsHistorySlice";
 import { WAREHOUSE_CAPACITY, STORE_CAPACITY } from "../data_storage/Capacities";
-import  { LogisticsInfo } from "../components/LogisticsInfo";
-import { LogisticsGrid } from "../components/LogisticsGrid";
-import  { LogisticsCardSidebar } from "../components/LogisticsCardSidebar";
+import LogisticsInfo from "../components/LogisticsInfo";
+import LogisticsGrid from "../components/LogisticsGrid";
+import LogisticsCardSidebar from "../components/LogisticsCardSidebar";
 
 function initStore(store) {
   return {

@@ -1,6 +1,6 @@
  import React from "react";
 import { useSelector } from "react-redux";
-import { selectRefillHistory } from "../redux/logisticsHistory/LogisticsHistorySelectors";
+import selectRefillHistory  from "../redux/LogisticsHistorySelectors";
 
 const LogisticsInfo = ({ warehouse, stores }) => {
 

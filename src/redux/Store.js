@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authReducer } from "./AuthLogicSlice";
-import { logisticsHistoryReducer } from "./LogisticsHistorySlice";
-import { warehouseReducer } from "./warehouse/warehouseSlice";
+import logisticsHistoryReducer from "./LogisticsHistorySlice";
+import warehouseReducer from "./WarehouseSlice";
 
 
 const store = configureStore({

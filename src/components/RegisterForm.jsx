@@ -35,8 +35,8 @@ export const RegisterForm = () => {
                 <Label htmlFor="login">Login</Label>
               </div>
               <TextInput
-                type= "login"
-                name= "login"
+                type="login"
+                name="login"
                 placeholder="Login"
                 required
               />
@@ -46,8 +46,8 @@ export const RegisterForm = () => {
                 <Label htmlFor="email">Your email</Label>
               </div>
               <TextInput
-                type= "email"
-                name= "email"
+                type="email"
+                name="email"
                 placeholder="name@company.com"
                 required
               />
