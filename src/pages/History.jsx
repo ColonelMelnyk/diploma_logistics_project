@@ -1,16 +1,21 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import selectRefillHistory from "../redux/LogisticsHistorySelectors";
 import HistoryTable from "../components/HistoryTable";
 
 const History = () => {
-  const refillHistory = useSelector(selectRefillHistory);
-
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  if (!isLoggedIn) {
+    return (
+      <section className="p-8 text-center text-xl">
+        <h2 className="font-bold text-2xl mb-4">Доступ заборонено</h2>
+        <p>Будь ласка, увійдіть у систему, щоб переглянути звіт про поповнення.</p>
+      </section>
+    );
+  }
   return (
-    <div className="pt-10 pb-20">
-      <h1 className="text-center text-3xl font-bold">Історія поповнень</h1>
-      <HistoryTable history={refillHistory} />
-    </div>
+    <section>
+      <HistoryTable />
+    </section>
   );
 };
 

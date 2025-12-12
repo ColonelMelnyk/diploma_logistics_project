@@ -11,8 +11,8 @@ const initialState = {
 const warehouseSlice = createSlice({
   name: "warehouse",
   initialState,
-  reducers: {
-    setWarehouseState(state, action) {
+    reducers: {
+      setWarehouseState(state = initialState, action) {
       return { ...state, ...action.payload };
     },
     updateWarehouseField(state, action) {
