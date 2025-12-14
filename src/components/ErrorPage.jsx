@@ -21,17 +21,17 @@ export class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <section className="p-8 text-center">
-          <h2 className="text-2xl font-bold mb-3">Сталася помилка в інтерфейсі</h2>
-          <p className="opacity-80 mb-4">
+        <section>
+          <h2>Сталася помилка в інтерфейсі</h2>
+          <p>
             Сторінка не змогла відобразитися. Спробуйте оновити або повернутися назад.
           </p>
 
-          <div className="flex gap-3 justify-center">
+          <div>
             <button
               type="button"
               onClick={() => window.location.reload()}
-              className="border px-4 py-2 rounded"
+            
             >
               Оновити сторінку
             </button>
@@ -39,7 +39,7 @@ export class ErrorBoundary extends React.Component {
             <button
               type="button"
               onClick={this.handleReset}
-              className="border px-4 py-2 rounded"
+            
             >
               Спробувати ще раз
             </button>

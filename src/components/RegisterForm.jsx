@@ -28,10 +28,10 @@ export const RegisterForm = () => {
       <Modal show={openModal} size="md" onClose={onCloseModal} onSubmit={handleSubmit} autoComplete="off">
         <ModalHeader />
         <ModalBody>
-          <form className="space-y-6">
-            <h3 className="text-xl font-medium text-gray-900 dark:text-white">Sign up into System</h3>
+          <form>
+            <h3>Sign up into System</h3>
             <div>
-              <div className="mb-2 block">
+              <div>
                 <Label htmlFor="login">Login</Label>
               </div>
               <TextInput
@@ -42,7 +42,7 @@ export const RegisterForm = () => {
               />
             </div>
             <div>
-              <div className="mb-2 block">
+              <div>
                 <Label htmlFor="email">Your email</Label>
               </div>
               <TextInput
@@ -54,7 +54,7 @@ export const RegisterForm = () => {
               />
             </div>
             <div>
-              <div className="mb-2 block">
+              <div>
                 <Label htmlFor="password">Your password</Label>
               </div>
               <TextInput 
@@ -63,7 +63,7 @@ export const RegisterForm = () => {
               autoComplete="new-password" 
               required />
             </div>
-            <div className="w-full">
+            <div>
               <Button>Sign Up</Button>
             </div>
           </form>

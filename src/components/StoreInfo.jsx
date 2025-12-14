@@ -13,7 +13,7 @@ const StoreInfo = () => {
         <p>Аксесуари: {warehouse.accessories} / 7000</p>
       </div>
       <Link to="/logistics">
-        <button className="text-[28px] opacity-80 dark:text-white">
+        <button>
            Логістика
         </button>
       </Link>

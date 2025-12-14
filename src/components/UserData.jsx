@@ -10,10 +10,10 @@ const UserData = () => {
   return (
     <div>
       <div> 
-        <p  className="text-[28px] opacity-80 dark:text-white">User: {name}</p>
-        <p  className="text-[28px] opacity-80 dark:text-white"> Mail: {email}</p>
+        <p>User: {name}</p>
+        <p> Mail: {email}</p>
       </div>
-      <button className="text-[28px] opacity-80 dark:text-white" type="button" onClick={() => { dispatch(logOut()); 
+      <button type="button" onClick={() => { dispatch(logOut()); 
         navigate("/home");}}>
         Log Out
       </button>

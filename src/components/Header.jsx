@@ -28,31 +28,31 @@ const Header = () => {
 
 
   return (
-  <nav className="flex items-center py-4 mx-4 *:mx-4 justify-between border-2 border-t-0 border-opacity-80">
-      <div className="*:mx-2 flex items-center">
+  <nav>
+      <div>
         <Link to="/home">
-          <div className="flex">
-            <button className="text-4xl font-bold text-main-yellow">
+          <div>
+            <button>
               TechSpeed
             </button>
           </div>
         </Link>
         <Link to="/logistics">
-          <button className="text-[28px] opacity-80 dark:text-white">
+          <button>
             Логістика
           </button>
         </Link>
         <Link to="/history">
-          <button className="text-[28px] opacity-80 dark:text-white">
+          <button>
             Звіт
           </button>
         </Link>
       </div>
-      <div className="*:mx-2 flex items-center">
+      <div>
         {isLoggedIn ? (
           <UserData/> 
         ) : (
-          <div className = "flex gap-[8px] flex-col">
+          <div>
           <RegisterSection/>
           </div>
         )}

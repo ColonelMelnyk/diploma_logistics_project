@@ -4,31 +4,29 @@ import { timeAgo } from "../redux/TimeAgo";
 const HistoryTable = ({ history }) => {
 
   if (!history || history.length === 0) {
-    return <p className="text-center opacity-70 mt-10">Немає записів історії</p>;
+    return <p>Немає записів історії</p>;
   }
 
   return (
-    <div className="max-w-3xl mx-auto mt-6">
-      <ul className="space-y-4">
-
+    <div >
+      <ul>
         {history
-          .slice()               // копія
-          .reverse()             // нові зверху
+          .slice()              
+          .reverse()             
           .map((entry, index) => (
             <li
               key={index}
-              className="border rounded p-4 shadow-sm bg-white"
             >
-              <p className="text-sm opacity-70 mb-2">
+              <p>
                 {timeAgo(entry.time)}
               </p>
               {entry.type === "store" ? (
                 <div>
-                  <p className="font-semibold">
-                    Поповнення магазину: <span className="text-blue-600">{entry.store}</span>
+                  <p>
+                    Поповнення магазину: <span>{entry.store}</span>
                   </p>
 
-                  <p className="mt-1">
+                  <p>
                     {Object.keys(entry.details).length === 3
                       ? "Поповнено всі категорії"
                       : `Поповнено: ${Object.keys(entry.details).join(", ")}`}
@@ -36,11 +34,11 @@ const HistoryTable = ({ history }) => {
                 </div>
               ) : (
                 <div>
-                  <p className="font-semibold text-green-700">
+                  <p>
                     Поповнення складу
                   </p>
 
-                  <p className="mt-1 opacity-80 text-sm">
+                  <p>
                     Додано:
                     <br /> Комп'ютери: {entry.details.computers}
                     <br /> Телефони/планшети: {entry.details.phones_tablets}
