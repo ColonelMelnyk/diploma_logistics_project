@@ -24,7 +24,6 @@ function randomPercent(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-
 const Logistics = () => {
   const dispatch = useDispatch();
 
@@ -43,7 +42,14 @@ const Logistics = () => {
     showToast._t = window.setTimeout(() => setToast(null), 2500);
   };
 
- 
+  async function generateStoreImage(storeName) {
+    const res = await fetch(
+      `/api/store-image?name=${encodeURIComponent(storeName)}`
+    );
+    if (!res.ok) throw new Error("Image API failed");
+    const data = await res.json();
+    return data.url || data.dataUrl;
+  }
 
   useEffect(() => {
     if (!isLoggedIn) return;
@@ -55,6 +61,25 @@ const Logistics = () => {
       console.error("Initialization error:", e);
     }
   }, [isLoggedIn, dispatch]);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    if (!stores.length) return;
+
+    (async () => {
+      try {
+        const updated = await Promise.all(
+          stores.map(async (s) => ({
+            ...s,
+            image: await generateStoreImage(s.name),
+          }))
+        );
+        dispatch(updateStores(updated));
+      } catch (e) {
+        console.error("Generate images error:", e);
+      }
+    })();
+  }, [isLoggedIn, stores.length, dispatch]);
 
   const handleOpenSidebar = (storeId) => {
     try {
