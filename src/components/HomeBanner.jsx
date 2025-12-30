@@ -16,7 +16,7 @@ const HomeBanner = () => {
           ЛОГІСТИЧНИЙ ЦЕНТР
         </button>
         {!isLoggedIn && (
-          <div style={{ marginTop: "20px" }}>
+          <div>
             <RegisterSection />
           </div>
         )}

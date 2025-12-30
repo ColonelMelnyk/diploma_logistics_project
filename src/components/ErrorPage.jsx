@@ -23,32 +23,11 @@ export class ErrorBoundary extends React.Component {
       return (
         <section>
           <h2>Сталася помилка в інтерфейсі</h2>
-          <p>
-            Сторінка не змогла відобразитися. Спробуйте оновити або повернутися назад.
-          </p>
-
+          <p>Сторінка не змогла відобразитися. Спробуйте оновити або повернутися назад.</p>
           <div>
-            <button
-              type="button"
-              onClick={() => window.location.reload()}
-            
-            >
-              Оновити сторінку
-            </button>
-
-            <button
-              type="button"
-              onClick={this.handleReset}
-            
-            >
-              Спробувати ще раз
-            </button>
+            <button type="button" onClick={() => window.location.reload()}>Оновити сторінку</button>
+            <button type="button" onClick={this.handleReset}>Спробувати ще раз </button>
           </div>
-
-          {/* Якщо хочеш — можна показувати короткий текст помилки в dev-режимі */}
-          {/* <pre className="mt-4 text-left text-xs opacity-70 overflow-auto">
-            {String(this.state.error)}
-          </pre> */}
         </section>
       );
     }

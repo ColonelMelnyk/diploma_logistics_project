@@ -61,5 +61,3 @@ const dispatch = useDispatch();
   );
 }
 export default LoginForm
-
-// <Button onClick={() => setOpenModal(true)}>Toggle modal</Button>

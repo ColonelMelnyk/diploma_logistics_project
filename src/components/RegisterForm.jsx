@@ -74,4 +74,3 @@ export const RegisterForm = () => {
 }
 export default RegisterForm
 
-//<Button onClick={() => setOpenModal(true)}>Toggle modal</Button>
