@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../redux/AuthLogicSelectors";
 import { useLocation } from "react-router-dom";
@@ -8,11 +9,15 @@ import RegisterForm from "../components/RegisterForm";
 import HomeInfo from "../components/HomeInfo";
 import StoreInfo from "../components/StoreInfo";
 
+
 const Home = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const location = useLocation();
   const showLogin = location.pathname === "/login";
   const showRegister = location.pathname === "/register";
+  useEffect(() => {
+    document.title = "TechSpeed — Home";
+  }, []);
   return (
     <section>
       <HomeBanner />

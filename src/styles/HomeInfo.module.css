@@ -1,0 +1,126 @@
+.section {
+  padding: 56px 0;
+}
+
+.slider {
+  position: relative;
+  max-width: 1660px;
+  margin: auto;
+  padding: 0 16px;
+}
+
+.slide {
+  height: 600px;
+  border-radius: 18px;
+
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.overlay {
+  height: 100%;
+  padding: 28px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.55),
+    rgba(0, 0, 0, 0.15)
+  );
+  color: #fff;
+}
+
+.kicker {
+  margin: 0;
+  margin-bottom: 50px;
+  font-size: 36px;
+  letter-spacing: 0.16em;
+  font-weight: 800;
+  opacity: 0.92;
+}
+
+.title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.text {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  opacity: 0.92;
+}
+
+/* Навігація */
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+
+  cursor: pointer;
+  transition: background 160ms ease, transform 120ms ease, border-color 160ms ease;
+}
+
+.navBtn:hover {
+  background: rgba(77, 90, 229, 0.65);
+  border-color: rgba(77, 90, 229, 0.85);
+  transform: translateY(-50%) translateY(-1px);
+}
+
+.prev {
+  left: 22px;
+}
+
+.next {
+  right: 22px;
+}
+
+/* Крапки */
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+
+  border: 0;
+  background: rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  transition: transform 120ms ease, background 160ms ease;
+}
+
+:root.dark .dot {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.dot:hover {
+  transform: translateY(-1px);
+  background: rgba(77, 90, 229, 0.55);
+}
+
+.dotActive {
+  background: var(--accent);
+}

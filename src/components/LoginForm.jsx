@@ -28,10 +28,10 @@ const dispatch = useDispatch();
         <ModalHeader />
         <ModalBody>
           <form>
-            <h3>Sign in to our platform</h3>
+            <h3>Увійдіть в систему</h3>
             <div>
               <div>
-                <Label htmlFor="email">Your email</Label>
+                <Label htmlFor="email">Пошта</Label>
               </div>
               <TextInput
                 type= "email"
@@ -43,7 +43,7 @@ const dispatch = useDispatch();
             </div>
             <div>
               <div>
-                <Label htmlFor="password">Your password</Label>
+                <Label htmlFor="password">Пароль</Label>
               </div>
               <TextInput 
               name="password" 
@@ -52,7 +52,7 @@ const dispatch = useDispatch();
               required />
             </div>
             <div>
-              <Button>Log in </Button>
+              <Button>Вхід</Button>
             </div>
           </form>
         </ModalBody>

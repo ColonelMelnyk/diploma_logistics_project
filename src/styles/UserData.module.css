@@ -1,0 +1,54 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.name {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 240px;
+}
+
+.email {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 240px;
+}
+
+.logout {
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 12px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, transform 120ms ease;
+}
+
+.logout:hover {
+  border-color: rgba(77, 90, 229, 0.55);
+  background: rgba(77, 90, 229, 0.10);
+  transform: translateY(-1px);
+}

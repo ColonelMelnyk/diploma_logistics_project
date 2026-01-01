@@ -1,8 +1,12 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector } from "react-redux"
+import { useEffect } from "react";
 import HistoryTable from "../components/HistoryTable";
 
 const History = () => {
+  useEffect(() => {
+    document.title = "TechSpeed — History";
+  }, []);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   if (!isLoggedIn) {
     return (

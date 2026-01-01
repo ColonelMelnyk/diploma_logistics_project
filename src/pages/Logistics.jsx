@@ -35,6 +35,9 @@ const Logistics = () => {
   const [selectedStore, setSelectedStore] = useState(null);
   const [toast, setToast] = useState(null);
 
+  useEffect(() => {
+    document.title = "TechSpeed — Logistics";
+  }, []);
 
   const showToast = (message) => {
     setToast(message);
@@ -304,7 +307,7 @@ const Logistics = () => {
     return (
       <section className="p-8 text-center text-xl">
         <h2>Доступ заборонено</h2>
-        <p>Будь ласка, увійдіть або зареєструйтесь.</p>
+        <p>Будь ласка, увійдіть у систему, щоб отримати доступ до центру керування логістикою</p>
       </section>
     );
   }

@@ -29,10 +29,10 @@ export const RegisterForm = () => {
         <ModalHeader />
         <ModalBody>
           <form>
-            <h3>Sign up into System</h3>
+            <h3>Реєстрація в системі</h3>
             <div>
               <div>
-                <Label htmlFor="login">Login</Label>
+                <Label htmlFor="login">Логін</Label>
               </div>
               <TextInput
                 type="login"
@@ -43,7 +43,7 @@ export const RegisterForm = () => {
             </div>
             <div>
               <div>
-                <Label htmlFor="email">Your email</Label>
+                <Label htmlFor="email">Пошта</Label>
               </div>
               <TextInput
                 type="email"
@@ -55,7 +55,7 @@ export const RegisterForm = () => {
             </div>
             <div>
               <div>
-                <Label htmlFor="password">Your password</Label>
+                <Label htmlFor="password">Пароль</Label>
               </div>
               <TextInput 
               name="password" 
@@ -64,7 +64,7 @@ export const RegisterForm = () => {
               required />
             </div>
             <div>
-              <Button>Sign Up</Button>
+              <Button>Реєстрація</Button>
             </div>
           </form>
         </ModalBody>

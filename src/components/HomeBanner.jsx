@@ -2,27 +2,36 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../redux/AuthLogicSelectors";
 import RegisterSection from "./RegisterSection";
+import { NavLink } from "react-router-dom";
+
+import styles from "../styles/HomeBanner.module.css";
+import bgImage from "../images/Background_image_1.gif";
 
 const HomeBanner = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
   return (
-    <div>
-      <div>
-        <h1>
-          TECHSPEED LOGISTIC SYSTEM
-        </h1>
-        <button type="button" name="login">
+    <section
+      className={styles.banner}
+      style={{ backgroundImage: `url(${bgImage})` }}
+    >
+      <div className={styles.content}>
+        <NavLink
+          to="/logistics"
+          className={({ isActive }) =>
+            `${styles.centerLink} ${isActive ? styles.active : ""}`
+          }
+        >
           ЛОГІСТИЧНИЙ ЦЕНТР
-        </button>
+        </NavLink>
+
         {!isLoggedIn && (
-          <div>
+          <div className={styles.register}>
             <RegisterSection />
           </div>
         )}
-
       </div>
-    </div>
+    </section>
   );
 };
 

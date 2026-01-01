@@ -1,0 +1,51 @@
+.banner {
+  max-height: 600px;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 200px 16px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+ 
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+
+.banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative; 
+}
+
+.centerLink {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+
+  text-decoration: none;
+  color: #fff;
+
+  transition: color 160ms ease, opacity 160ms ease;
+}
+
+.centerLink:hover {
+  color: var(--accent);
+}
+
+.active {
+  color: var(--accent);
+}
+
+.register {
+  margin-top: 60px;
+}
