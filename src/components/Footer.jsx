@@ -21,7 +21,7 @@ const Footer = () => {
         </div>
 
         <div className={styles.social}>
-          <p className={styles.socialTitle}>Social media</p>
+          <p className={styles.socialTitle}>Соцмережі:</p>
           <ul className={styles.socialList}>
             <li>
               <a className={styles.socialLink} href="https://instagram.com" target="_blank" rel="noopener noreferrer">

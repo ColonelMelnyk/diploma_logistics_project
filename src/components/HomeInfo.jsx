@@ -53,24 +53,6 @@ const HomeInfo = () => {
           </div>
         </div>
 
-        <button
-          type="button"
-          className={`${styles.navBtn} ${styles.prev}`}
-          onClick={() => goTo(index - 1)}
-          aria-label="Попередній слайд"
-        >
-          ‹
-        </button>
-
-        <button
-          type="button"
-          className={`${styles.navBtn} ${styles.next}`}
-          onClick={() => goTo(index + 1)}
-          aria-label="Наступний слайд"
-        >
-          ›
-        </button>
-
         <div className={styles.dots} role="tablist" aria-label="Слайди">
           {slides.map((_, i) => (
             <button
