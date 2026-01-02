@@ -1,4 +1,4 @@
- import React from "react";
+ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import selectRefillHistory  from "../redux/LogisticsHistorySelectors";
 
@@ -8,11 +8,18 @@ const LogisticsInfo = ({ warehouse, stores }) => {
 
   //const lastEntry = refillHistory.at(-1);
 
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000); // або 60000
+    return () => clearInterval(t);
+  }, []);
+
   const lastStoreRefill = [...refillHistory]
     .reverse()
     .find((entry) => entry.type === "store");
 
-  const msLeft = warehouse.nextArrival - Date.now();
+  const msLeft = warehouse.nextArrival - now;
   const minutesLeft = Math.max(0, Math.floor(msLeft / 60000));
 
   return (

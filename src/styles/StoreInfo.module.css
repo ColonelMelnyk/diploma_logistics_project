@@ -1,0 +1,121 @@
+.section {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 44px 16px 64px;
+}
+
+.card {
+  border-radius: 20px;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.10));
+  background: var(--surface, rgba(255, 255, 255, 0.04));
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+  padding: 28px;
+}
+
+.brand {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  margin: 10px 0 0;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.78;
+}
+
+.grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 720px) {
+  .grid {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+  }
+}
+
+.item {
+  border-radius: 16px;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.10));
+  background: var(--bg, rgba(0, 0, 0, 0.10));
+  padding: 14px 14px 12px;
+}
+
+.itemTitle {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 800;
+  opacity: 0.9;
+}
+
+.itemNums {
+  margin: 8px 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.progress {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.10);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: var(--accent, #4D5AE5);
+  transition: width 240ms ease;
+}
+
+.actions {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.linkBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 44px;
+  padding: 0 16px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(77, 90, 229, 0.55);
+
+  background: rgba(77, 90, 229, 0.12);
+  color: var(--text, #fff);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+
+  cursor: pointer;
+  transition: background 160ms ease, transform 120ms ease, border-color 160ms ease;
+}
+
+.linkBtn:hover {
+  background: rgba(77, 90, 229, 0.18);
+  border-color: rgba(77, 90, 229, 0.75);
+  transform: translateY(-1px);
+}
+
+.note {
+  margin: 12px 0 0;
+  font-size: 12px;
+  opacity: 0.65;
+}

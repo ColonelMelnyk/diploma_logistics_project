@@ -7,23 +7,47 @@ import logisticsHistoryReducer from "./LogisticsHistorySlice";
 import warehouseReducer from "./WarehouseSlice";
 import storesReducer from "./StoresSlice";
 
+import {
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+
 const authPersistConfig = {
   key: "auth",
   storage,
-  whitelist: ["token"],
+  whitelist: ["token"], 
 };
-const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
-
+const storesPersistConfig = {
+  key: "stores",
+  storage,
+};
+const warehousePersistConfig = {
+  key: "warehouse",
+  storage,
+};
+const logisticsHistoryPersistConfig = {
+  key: "logisticsHistory",
+  storage,
+};
 export const store = configureStore({
   reducer: {
-    auth: persistedAuthReducer,
-    logisticsHistory: logisticsHistoryReducer,
-    warehouse: warehouseReducer,
-    stores: storesReducer,
+    auth: persistReducer(authPersistConfig, authReducer),
+    stores: persistReducer(storesPersistConfig, storesReducer),
+    warehouse: persistReducer(warehousePersistConfig, warehouseReducer),
+    logisticsHistory: persistReducer(
+      logisticsHistoryPersistConfig,
+      logisticsHistoryReducer
+    ),
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false, 
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
     }),
 });
 
