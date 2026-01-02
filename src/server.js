@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import OpenAI from "openai";
 
@@ -13,7 +14,7 @@ app.get("/api/store-image", async (req, res) => {
     const result = await client.images.generate({
       model: "gpt-image-1",
       prompt,
-      size: "512x512",
+      size: "1024x1024",
     });
 
     const first = result.data?.[0];
@@ -24,8 +25,21 @@ app.get("/api/store-image", async (req, res) => {
 
     res.status(500).json({ error: "No image returned" });
   } catch (e) {
-    console.error(e);
-    res.status(500).json({ error: "Image generation failed" });
+    console.error("Image API error:", {
+      message: e?.message,
+      status: e?.status,
+      code: e?.code,
+      type: e?.type,
+      name: e?.name,
+    });
+    console.error("Full error:", e);
+    res.status(500).json({
+      error: "Image generation failed",
+      message: e?.message,
+      status: e?.status,
+      code: e?.code,
+      type: e?.type,
+    });
   }
 });
 
