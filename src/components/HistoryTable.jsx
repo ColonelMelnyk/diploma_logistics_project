@@ -2,24 +2,20 @@ import React from "react";
 import { timeAgo } from "../redux/TimeAgo";
 
 const HistoryTable = ({ history }) => {
-
   if (!history || history.length === 0) {
     return <p>Немає записів історії</p>;
   }
 
   return (
-    <div >
+    <div>
       <ul>
         {history
-          .slice()              
-          .reverse()             
+          .slice()
+          .reverse()
           .map((entry, index) => (
-            <li
-              key={index}
-            >
-              <p>
-                {timeAgo(entry.time)}
-              </p>
+            <li key={index}>
+              <p>{timeAgo(entry.time)}</p>
+
               {entry.type === "store" ? (
                 <div>
                   <p>
@@ -34,9 +30,7 @@ const HistoryTable = ({ history }) => {
                 </div>
               ) : (
                 <div>
-                  <p>
-                    Поповнення складу
-                  </p>
+                  <p>Поповнення складу</p>
 
                   <p>
                     Додано:

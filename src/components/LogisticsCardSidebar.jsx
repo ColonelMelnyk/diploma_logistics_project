@@ -7,7 +7,7 @@ const LogisticsCardSidebar = ({
   onRefillSingle,
   onRefillAll,
 }) => {
-  if (!store) return null;
+  if (!isOpen || !store) return null;
   return (
     <aside>
       <button

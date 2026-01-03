@@ -9,51 +9,73 @@ function initStore(store) {
     phones_tablets: Math.floor(STORE_CAPACITY.phones_tablets * 0.6),
     accessories: Math.floor(STORE_CAPACITY.accessories * 0.6),
     lastSale: null,
-    lastRefill: null
+    lastRefill: null,
   };
 }
 
 const initialState = {
-  stores: [],
+  byUser: {}, // { [email]: { stores: [...] } }
 };
 
 const storesSlice = createSlice({
   name: "stores",
   initialState,
   reducers: {
-    initializeStores(state) {
-      state.stores = storeList.map(initStore);
+    initializeStoresForUser(state, action) {
+      const { userKey } = action.payload;
+      if (!userKey) return;
+
+      if (!state.byUser[userKey]) {
+        state.byUser[userKey] = { stores: storeList.map(initStore) };
+      }
     },
 
-    updateStores(state, action) {
-      state.stores = action.payload;
+    updateStoresForUser(state, action) {
+      const { userKey, stores } = action.payload;
+      if (!userKey) return;
+
+      if (!state.byUser[userKey]) state.byUser[userKey] = { stores: [] };
+      state.byUser[userKey].stores = Array.isArray(stores) ? stores : [];
     },
 
-    refillSingle(state, action) {
-      const { storeId, category, amount } = action.payload;
-      const store = state.stores.find(s => s.id === storeId);
+    // Якщо десь у майбутньому захочеш використовувати точкове поповнення через slice:
+    refillSingleForUser(state, action) {
+      const { userKey, storeId, category, amount } = action.payload;
+      if (!userKey) return;
+
+      const bucket = state.byUser[userKey];
+      if (!bucket?.stores?.length) return;
+
+      const store = bucket.stores.find((s) => s.id === storeId);
       if (!store) return;
+
       store[category] += amount;
       store.lastRefill = new Date().toLocaleTimeString();
     },
 
-    refillAll(state, action) {
-      const { storeId, amounts } = action.payload;
-      const store = state.stores.find(s => s.id === storeId);
+    refillAllForUser(state, action) {
+      const { userKey, storeId, amounts } = action.payload;
+      if (!userKey) return;
+
+      const bucket = state.byUser[userKey];
+      if (!bucket?.stores?.length) return;
+
+      const store = bucket.stores.find((s) => s.id === storeId);
       if (!store) return;
+
       store.computers = amounts.computers;
       store.phones_tablets = amounts.phones_tablets;
       store.accessories = amounts.accessories;
       store.lastRefill = new Date().toLocaleTimeString();
-    }
+    },
   },
 });
 
 export const {
-  initializeStores,
-  updateStores,
-  refillAll,
-  refillSingle
+  initializeStoresForUser,
+  updateStoresForUser,
+  refillAllForUser,
+  refillSingleForUser,
 } = storesSlice.actions;
 
 export default storesSlice.reducer;

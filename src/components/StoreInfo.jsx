@@ -3,7 +3,10 @@ import { useSelector } from "react-redux";
 import styles from "../styles/StoreInfo.module.css";
 
 const StoreInfo = () => {
-  const warehouse = useSelector((state) => state.warehouse);
+  const userKey = useSelector((state) => state.auth?.user?.email || null);
+  const warehouse = useSelector((state) =>
+    userKey ? state.warehouse?.byUser?.[userKey] ?? null : null
+  );
 
   const max = {
     computers: 700,
@@ -17,6 +20,10 @@ const StoreInfo = () => {
     return Math.max(0, Math.min(100, p));
   };
 
+  const computers = warehouse?.computers ?? 0;
+  const phones_tablets = warehouse?.phones_tablets ?? 0;
+  const accessories = warehouse?.accessories ?? 0;
+
   return (
     <section className={styles.section}>
       <div className={styles.card}>
@@ -27,12 +34,12 @@ const StoreInfo = () => {
           <div className={styles.item}>
             <p className={styles.itemTitle}>Комп&apos;ютери</p>
             <p className={styles.itemNums}>
-              {warehouse.computers} / {max.computers} ({pct(warehouse.computers, max.computers)}%)
+              {computers} / {max.computers} ({pct(computers, max.computers)}%)
             </p>
             <div className={styles.progress}>
               <div
                 className={styles.progressFill}
-                style={{ width: `${pct(warehouse.computers, max.computers)}%` }}
+                style={{ width: `${pct(computers, max.computers)}%` }}
               />
             </div>
           </div>
@@ -40,12 +47,13 @@ const StoreInfo = () => {
           <div className={styles.item}>
             <p className={styles.itemTitle}>Телефони та планшети</p>
             <p className={styles.itemNums}>
-              {warehouse.phones_tablets} / {max.phones_tablets} ({pct(warehouse.phones_tablets, max.phones_tablets)}%)
+              {phones_tablets} / {max.phones_tablets} (
+              {pct(phones_tablets, max.phones_tablets)}%)
             </p>
             <div className={styles.progress}>
               <div
                 className={styles.progressFill}
-                style={{ width: `${pct(warehouse.phones_tablets, max.phones_tablets)}%` }}
+                style={{ width: `${pct(phones_tablets, max.phones_tablets)}%` }}
               />
             </div>
           </div>
@@ -53,12 +61,12 @@ const StoreInfo = () => {
           <div className={styles.item}>
             <p className={styles.itemTitle}>Аксесуари</p>
             <p className={styles.itemNums}>
-              {warehouse.accessories} / {max.accessories} ({pct(warehouse.accessories, max.accessories)}%)
+              {accessories} / {max.accessories} ({pct(accessories, max.accessories)}%)
             </p>
             <div className={styles.progress}>
               <div
                 className={styles.progressFill}
-                style={{ width: `${pct(warehouse.accessories, max.accessories)}%` }}
+                style={{ width: `${pct(accessories, max.accessories)}%` }}
               />
             </div>
           </div>

@@ -19,7 +19,7 @@ const LogisticsInfo = ({ warehouse, stores }) => {
     .reverse()
     .find((entry) => entry.type === "store");
 
-  const msLeft = warehouse.nextArrival - now;
+  const msLeft = (warehouse?.nextArrival ?? 0) - now;
   const minutesLeft = Math.max(0, Math.floor(msLeft / 60000));
 
   return (
@@ -35,14 +35,14 @@ const LogisticsInfo = ({ warehouse, stores }) => {
 
       <div>
         <p>
-          Час з останнього прибуття на склад:{" "}
+          Час останнього прибуття на склад:{" "}
           {warehouse.lastArrival ?? "немає даних"}
         </p>
 
         <p>Час до наступного прибуття: {minutesLeft} хв</p>
 
         <p>
-          Час з останньої відправки у магазин:{" "}
+          Час останньої відправки у магазин:{" "}
           {lastStoreRefill ? new Date(lastStoreRefill.time).toLocaleTimeString() : "немає даних"}
         </p>
 

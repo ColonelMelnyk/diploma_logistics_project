@@ -1,26 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  computers: 0,
-  phones_tablets: 0,
-  accessories: 0,
-  lastArrival: null,
-  nextArrival: null
+  byUser: {}, // { [email]: { computers, phones_tablets, accessories, lastArrival, nextArrival } }
 };
 
 const warehouseSlice = createSlice({
   name: "warehouse",
   initialState,
-    reducers: {
-      setWarehouseState(state = initialState, action) {
-      return { ...state, ...action.payload };
+  reducers: {
+    ensureWarehouseForUser(state, action) {
+      const { userKey, initial } = action.payload;
+      if (!userKey) return;
+      if (!state.byUser[userKey]) {
+        state.byUser[userKey] = initial;
+      }
     },
+
+    setWarehouseState(state, action) {
+      const { userKey, patch } = action.payload;
+      if (!userKey) return;
+      const prev = state.byUser[userKey] ?? null;
+      state.byUser[userKey] = { ...(prev || {}), ...(patch || {}) };
+    },
+
     updateWarehouseField(state, action) {
-      const { key, value } = action.payload;
-      state[key] = value;
-    }
-  }
+      const { userKey, key, value } = action.payload;
+      if (!userKey || !key) return;
+      if (!state.byUser[userKey]) state.byUser[userKey] = {};
+      state.byUser[userKey][key] = value;
+    },
+  },
 });
 
-export const { setWarehouseState, updateWarehouseField } = warehouseSlice.actions;
+export const { ensureWarehouseForUser, setWarehouseState, updateWarehouseField } =
+  warehouseSlice.actions;
+
 export default warehouseSlice.reducer;

@@ -1,13 +1,16 @@
-import React from "react";
-import { useSelector } from "react-redux"
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import HistoryTable from "../components/HistoryTable";
+import selectRefillHistory from "../redux/LogisticsHistorySelectors";
 
 const History = () => {
   useEffect(() => {
     document.title = "TechSpeed — History";
   }, []);
+
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const history = useSelector(selectRefillHistory);
+
   if (!isLoggedIn) {
     return (
       <section>
@@ -16,9 +19,10 @@ const History = () => {
       </section>
     );
   }
+
   return (
     <section>
-      <HistoryTable />
+      <HistoryTable history={history} />
     </section>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { updateStores } from "../redux/StoresSlice";
+import { updateStoresForUser } from "../redux/StoresSlice";
 import { setWarehouseState } from "../redux/WarehouseSlice";
 import { addStoreRefill } from "../redux/LogisticsHistorySlice";
 
@@ -14,9 +14,15 @@ import LogisticsCardSidebar from "../components/LogisticsCardSidebar";
 const Logistics = () => {
   const dispatch = useDispatch();
 
-  const warehouse = useSelector((state) => state.warehouse);
-  const stores = useSelector((state) => state.stores?.stores || []);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const userKey = useSelector((state) => state.auth?.user?.email || null);
+
+  const warehouse = useSelector((state) =>
+    userKey ? state.warehouse?.byUser?.[userKey] ?? null : null
+  );
+  const stores = useSelector((state) =>
+    userKey ? state.stores?.byUser?.[userKey]?.stores ?? [] : []
+  );
 
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [selectedStore, setSelectedStore] = useState(null);
@@ -46,6 +52,7 @@ const Logistics = () => {
 
   const handleRefillAll = (storeId) => {
     try {
+      if (!userKey) return;
       if (!warehouse) return;
 
       const store = stores.find((s) => s.id === storeId);
@@ -79,10 +86,13 @@ const Logistics = () => {
 
       dispatch(
         setWarehouseState({
-          ...warehouse,
-          computers: warehouse.computers - need.computers,
-          phones_tablets: warehouse.phones_tablets - need.phones_tablets,
-          accessories: warehouse.accessories - need.accessories,
+          userKey,
+          patch: {
+            ...warehouse,
+            computers: warehouse.computers - need.computers,
+            phones_tablets: warehouse.phones_tablets - need.phones_tablets,
+            accessories: warehouse.accessories - need.accessories,
+          },
         })
       );
 
@@ -98,8 +108,8 @@ const Logistics = () => {
             }
       );
 
-      dispatch(updateStores(updatedStores));
-      dispatch(addStoreRefill({ store: store.name, details: need }));
+      dispatch(updateStoresForUser({ userKey, stores: updatedStores }));
+      dispatch(addStoreRefill({ userKey, store: store.name, details: need }));
       showToast("Магазин успішно поповнено");
     } catch (e) {
       console.error("handleRefillAll error:", e);
@@ -109,6 +119,7 @@ const Logistics = () => {
 
   const handleRefillSingle = (storeId, category) => {
     try {
+      if (!userKey) return;
       if (!warehouse) return;
 
       const store = stores.find((s) => s.id === storeId);
@@ -128,8 +139,11 @@ const Logistics = () => {
 
       dispatch(
         setWarehouseState({
-          ...warehouse,
-          [category]: warehouse[category] - need,
+          userKey,
+          patch: {
+            ...warehouse,
+            [category]: warehouse[category] - need,
+          },
         })
       );
 
@@ -143,14 +157,8 @@ const Logistics = () => {
             }
       );
 
-      dispatch(updateStores(updatedStores));
-      dispatch(
-        addStoreRefill({
-          store: store.name,
-          details: { [category]: need },
-        })
-      );
-
+      dispatch(updateStoresForUser({ userKey, stores: updatedStores }));
+      dispatch(addStoreRefill({ userKey, store: store.name, details: { [category]: need } }));
       showToast("Товар успішно поповнено");
     } catch (e) {
       console.error("handleRefillSingle error:", e);
@@ -175,17 +183,14 @@ const Logistics = () => {
       {toast && <div role="status">{toast}</div>}
 
       <LogisticsInfo warehouse={warehouse} stores={stores} />
-
-      <LogisticsGrid
-        stores={stores}
-        onOpen={handleOpenSidebar}
-        onRefill={handleRefillAll}
-      />
-
+      <LogisticsGrid stores={stores} onOpen={handleOpenSidebar} onRefill={handleRefillAll} />
       <LogisticsCardSidebar
         isOpen={isSidebarOpen}
         store={selectedStore}
-        onClose={() => setSidebarOpen(false)}
+        onClose={() => {
+          setSidebarOpen(false);
+          setSelectedStore(null);
+        }}
         onRefillAll={handleRefillAll}
         onRefillSingle={handleRefillSingle}
       />
