@@ -1,0 +1,11 @@
+.grid {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 22px 16px 56px;
+
+  list-style: none;
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}

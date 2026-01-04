@@ -1,8 +1,9 @@
 import LogisticsCard from "../components/LogisticsCard";
+import styles from "../styles/LogisticsGrid.module.css";
 
 const LogisticsGrid = ({ stores, onOpen, onRefill }) => {
   return (
-    <ul>
+    <ul className={styles.grid}>
       {stores.map((store) => (
         <LogisticsCard
           key={store.id}

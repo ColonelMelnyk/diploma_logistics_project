@@ -25,7 +25,8 @@ const Logistics = () => {
   );
 
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedStore, setSelectedStore] = useState(null);
+  const [selectedStoreId, setSelectedStoreId] = useState(null);
+  const selectedStore = stores.find((s) => s.id === selectedStoreId) ?? null;
   const [toast, setToast] = useState(null);
 
   useEffect(() => {
@@ -39,15 +40,13 @@ const Logistics = () => {
   };
 
   const handleOpenSidebar = (storeId) => {
-    try {
-      const store = stores.find((s) => s.id === storeId);
-      if (!store) return;
-      setSelectedStore(store);
-      setSidebarOpen(true);
-    } catch (e) {
-      console.error("handleOpenSidebar error:", e);
-      showToast("Помилка відкриття картки магазину");
-    }
+  try {
+    setSelectedStoreId(storeId);
+    setSidebarOpen(true);
+  } catch (e) {
+    console.error("handleOpenSidebar error:", e);
+    showToast("Помилка відкриття картки магазину");
+  }
   };
 
   const handleRefillAll = (storeId) => {
@@ -189,7 +188,7 @@ const Logistics = () => {
         store={selectedStore}
         onClose={() => {
           setSidebarOpen(false);
-          setSelectedStore(null);
+          setSelectedStoreId(null);
         }}
         onRefillAll={handleRefillAll}
         onRefillSingle={handleRefillSingle}

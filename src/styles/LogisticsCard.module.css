@@ -1,0 +1,102 @@
+.card {
+  border-radius: 18px;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  background: var(--surface, rgba(255, 255, 255, 0.04));
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.media {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  display: block;
+}
+
+.body {
+  padding: 18px 18px 16px;
+  border-top: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--text, #fff);
+}
+
+.meta {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  font-weight: 700;
+  color: var(--muted, rgba(255, 255, 255, 0.7));
+}
+
+.actions {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 12px;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+
+  cursor: pointer;
+
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 120ms ease;
+}
+
+.btn:hover {
+  border-color: rgba(77, 90, 229, 0.55);
+  background: rgba(77, 90, 229, 0.10);
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(77, 90, 229, 0.35);
+}
+
+/* Primary button */
+
+.primary {
+  border-color: rgba(77, 90, 229, 0.55);
+  background: var(--accent);
+  color: #fff;
+}
+
+.primary:hover {
+  background: #3f4fe0; /* той самий hover, що в Register / StoreInfo */
+  border-color: #3f4fe0;
+  transform: translateY(-1px);
+}
+
+.primary:active {
+  transform: translateY(0);
+}
+
+.primary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(77, 90, 229, 0.45);
+}
