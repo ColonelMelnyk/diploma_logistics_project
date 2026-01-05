@@ -26,6 +26,12 @@
 body{
   background: var(--bg);
   color: var(--text);
+  margin: 0;
+  min-height: 100vh;
+
+  background: 
+    url("./images/bg_image.jpg") center / cover no-repeat fixed;
+
 }
 
 
