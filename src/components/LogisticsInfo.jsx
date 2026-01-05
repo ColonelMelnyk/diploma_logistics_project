@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import selectRefillHistory from "../redux/LogisticsHistorySelectors";
 import styles from "../styles/LogisticsInfo.module.css";
@@ -9,11 +9,19 @@ const MAX = {
   accessories: 7000,
 };
 
+const STORE_MAX = {
+  computers: 100,
+  phones_tablets: 300,
+  accessories: 1000,
+};
+
 const pct = (value, limit) => {
   if (!limit) return 0;
   const p = Math.round((value / limit) * 100);
   return Math.max(0, Math.min(100, p));
 };
+
+const clamp = (n) => Math.max(0, Math.min(100, n));
 
 const LogisticsInfo = ({ warehouse, stores }) => {
   const refillHistory = useSelector(selectRefillHistory);
@@ -41,6 +49,30 @@ const LogisticsInfo = ({ warehouse, stores }) => {
     ? new Date(lastStoreRefill.time).toLocaleTimeString()
     : "немає даних";
   const lastDispatchStore = lastStoreRefill ? lastStoreRefill.store : "немає даних";
+
+  // ✅ Таблиця станів магазинів
+  const storesStatus = useMemo(() => {
+    return (stores ?? []).map((s) => {
+      const fillC = pct(s.computers ?? 0, STORE_MAX.computers);
+      const fillP = pct(s.phones_tablets ?? 0, STORE_MAX.phones_tablets);
+      const fillA = pct(s.accessories ?? 0, STORE_MAX.accessories);
+
+      const avg = clamp(Math.round((fillC + fillP + fillA) / 3));
+
+      let kind = "warn";
+      let label = "Неповний";
+
+      if (avg === 0) {
+        kind = "bad";
+        label = "Порожній";
+      } else if (avg === 100) {
+        kind = "ok";
+        label = "Повний";
+      }
+
+      return { id: s.id, name: s.name, avg, kind, label };
+    });
+  }, [stores]);
 
   return (
     <section className={styles.section}>
@@ -112,9 +144,7 @@ const LogisticsInfo = ({ warehouse, stores }) => {
               </li>
             </ul>
 
-            <p className={styles.note}>
-              Дані оновлюються автоматично під час роботи системи.
-            </p>
+            <p className={styles.note}>Дані оновлюються автоматично під час роботи системи.</p>
           </div>
 
           <div className={styles.block}>
@@ -138,19 +168,32 @@ const LogisticsInfo = ({ warehouse, stores }) => {
             </ul>
 
             <h3 className={styles.blockTitle} style={{ marginTop: 14 }}>
-              Магазини
+              Стан магазинів
             </h3>
 
-            <ul className={styles.storesList}>
-              {stores.map((store) => (
-                <li key={store.id}>
-                  <a className={styles.storeLink} href={`/logistics/store/${store.id}`}>
-                    <span>{store.name}</span>
-                    <span className={styles.storeArrow}>→</span>
-                  </a>
-                </li>
+            <div className={styles.storeTable}>
+              <div className={styles.storeHead}>
+                <div>Магазин</div>
+                <div>Заповненість</div>
+                <div style={{ textAlign: "right" }}>Статус</div>
+              </div>
+
+              {storesStatus.map((s) => (
+                <div className={styles.storeRow} key={s.id}>
+                  <div className={styles.storeName}>{s.name}</div>
+                  <div className={styles.storeFill}>{s.avg}%</div>
+
+                  <div className={`${styles.storeBadge} ${styles[s.kind]}`}>
+                    <span className={styles.storeDot} />
+                    <span>{s.label}</span>
+                  </div>
+                </div>
               ))}
-            </ul>
+            </div>
+
+            <p className={styles.note}>
+              Порожній = 0%, Повний = 100%, інакше — Неповний.
+            </p>
           </div>
         </div>
       </div>
