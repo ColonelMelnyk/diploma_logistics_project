@@ -23,6 +23,10 @@ function randomPercent(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+function emitToast(detail) {
+  window.dispatchEvent(new CustomEvent("ts:toast", { detail }));
+}
+
 const LogisticsEngine = () => {
   const dispatch = useDispatch();
 
@@ -74,6 +78,7 @@ const LogisticsEngine = () => {
         wh.computers >= WAREHOUSE_CAPACITY.computers &&
         wh.phones_tablets >= WAREHOUSE_CAPACITY.phones_tablets &&
         wh.accessories >= WAREHOUSE_CAPACITY.accessories;
+
       if (warehouseFull) {
         dispatch(
           setWarehouseState({
@@ -110,6 +115,11 @@ const LogisticsEngine = () => {
 
       if (!nothingAdded) {
         dispatch(addWarehouseRefill({ userKey, details: added }));
+
+        emitToast({
+          variant: "success",
+          message: `Склад поповнено (+${added.computers} / +${added.phones_tablets} / +${added.accessories})`,
+        });
       }
 
       dispatch(setWarehouseState({ userKey, patch: newWarehouse }));
@@ -128,28 +138,27 @@ const LogisticsEngine = () => {
         computers: Math.max(
           0,
           s.computers -
-            Math.floor(
-              STORE_CAPACITY.computers * (randomPercent(5, 15) / 100)
-            )
+            Math.floor(STORE_CAPACITY.computers * (randomPercent(5, 15) / 100))
         ),
         phones_tablets: Math.max(
           0,
           s.phones_tablets -
-            Math.floor(
-              STORE_CAPACITY.phones_tablets * (randomPercent(5, 15) / 100)
-            )
+            Math.floor(STORE_CAPACITY.phones_tablets * (randomPercent(5, 15) / 100))
         ),
         accessories: Math.max(
           0,
           s.accessories -
-            Math.floor(
-              STORE_CAPACITY.accessories * (randomPercent(5, 15) / 100)
-            )
+            Math.floor(STORE_CAPACITY.accessories * (randomPercent(5, 15) / 100))
         ),
         lastSale: new Date().toLocaleTimeString(),
       }));
 
       dispatch(updateStoresForUser({ userKey, stores: updated }));
+
+      emitToast({
+        variant: "warning",
+        message: "Цикл продажів виконано (товари в магазинах зменшились)",
+      });
     } catch (e) {
       console.error("LogisticsEngine simulateSales error:", e);
     }
@@ -164,14 +173,13 @@ const LogisticsEngine = () => {
 
       const now = Date.now();
       const next = wh.nextArrival ?? now + WAREHOUSE_CYCLE_MS;
-
       const delay = Math.max(0, next - now);
 
       window.clearTimeout(whTimerRef.current);
       whTimerRef.current = window.setTimeout(() => {
         refillWarehouse();
         schedule();
-      }, delay + 50); 
+      }, delay + 50);
     };
 
     if (warehouseRef.current?.nextArrival && Date.now() >= warehouseRef.current.nextArrival) {
@@ -187,11 +195,13 @@ const LogisticsEngine = () => {
 
   useEffect(() => {
     if (!isLoggedIn || !userKey) return;
+
     const tick = () => {
       simulateSales();
       window.clearTimeout(salesTimerRef.current);
       salesTimerRef.current = window.setTimeout(tick, SALES_CYCLE_MS);
     };
+
     tick();
     return () => {
       window.clearTimeout(salesTimerRef.current);

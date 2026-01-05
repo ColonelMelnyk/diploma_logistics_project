@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { updateStoresForUser } from "../redux/StoresSlice";
@@ -10,6 +10,8 @@ import { STORE_CAPACITY } from "../data_storage/Capacities";
 import LogisticsInfo from "../components/LogisticsInfo";
 import LogisticsGrid from "../components/LogisticsGrid";
 import LogisticsCardSidebar from "../components/LogisticsCardSidebar";
+
+import Toast from "../components/Toast";
 
 const Logistics = () => {
   const dispatch = useDispatch();
@@ -27,26 +29,39 @@ const Logistics = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [selectedStoreId, setSelectedStoreId] = useState(null);
   const selectedStore = stores.find((s) => s.id === selectedStoreId) ?? null;
+
   const [toast, setToast] = useState(null);
+  const toastTimerRef = useRef(null);
 
   useEffect(() => {
     document.title = "TechSpeed — Logistics";
   }, []);
 
-  const showToast = (message) => {
-    setToast(message);
-    window.clearTimeout(showToast._t);
-    showToast._t = window.setTimeout(() => setToast(null), 2500);
+  const showToast = (message, variant = "error") => {
+    setToast({ message, variant });
+    window.clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = window.setTimeout(() => setToast(null), 2500);
   };
 
+  useEffect(() => {
+    const onToast = (e) => {
+      const { message, variant } = e.detail || {};
+      if (!message) return;
+      showToast(message, variant || "error");
+    };
+
+    window.addEventListener("ts:toast", onToast);
+    return () => window.removeEventListener("ts:toast", onToast);
+  }, []);
+
   const handleOpenSidebar = (storeId) => {
-  try {
-    setSelectedStoreId(storeId);
-    setSidebarOpen(true);
-  } catch (e) {
-    console.error("handleOpenSidebar error:", e);
-    showToast("Помилка відкриття картки магазину");
-  }
+    try {
+      setSelectedStoreId(storeId);
+      setSidebarOpen(true);
+    } catch (e) {
+      console.error("handleOpenSidebar error:", e);
+      showToast("Помилка відкриття картки магазину", "error");
+    }
   };
 
   const handleRefillAll = (storeId) => {
@@ -63,7 +78,7 @@ const Logistics = () => {
         store.accessories >= STORE_CAPACITY.accessories;
 
       if (storeFull) {
-        showToast("Дію скасовано: магазин заповнений на 100%");
+        showToast("Дію скасовано: магазин заповнений на 100%", "warning");
         return;
       }
 
@@ -79,7 +94,7 @@ const Logistics = () => {
         warehouse.accessories >= need.accessories;
 
       if (!enough) {
-        showToast("Недостатньо товарів на складі");
+        showToast("Недостатньо товарів на складі", "error");
         return;
       }
 
@@ -109,10 +124,11 @@ const Logistics = () => {
 
       dispatch(updateStoresForUser({ userKey, stores: updatedStores }));
       dispatch(addStoreRefill({ userKey, store: store.name, details: need }));
-      showToast("Магазин успішно поповнено");
+    
+      showToast("Магазин успішно поповнено", "success");
     } catch (e) {
       console.error("handleRefillAll error:", e);
-      showToast("Помилка під час поповнення магазину");
+      showToast("Помилка під час поповнення магазину", "error");
     }
   };
 
@@ -125,14 +141,14 @@ const Logistics = () => {
       if (!store) return;
 
       if (store[category] >= STORE_CAPACITY[category]) {
-        showToast("Цей товар вже заповнений");
+        showToast("Цей товар вже заповнений", "warning");
         return;
       }
 
       const need = STORE_CAPACITY[category] - store[category];
 
       if (warehouse[category] < need) {
-        showToast("Недостатньо товару на складі");
+        showToast("Недостатньо товару на складі", "error");
         return;
       }
 
@@ -158,10 +174,11 @@ const Logistics = () => {
 
       dispatch(updateStoresForUser({ userKey, stores: updatedStores }));
       dispatch(addStoreRefill({ userKey, store: store.name, details: { [category]: need } }));
-      showToast("Товар успішно поповнено");
+
+      showToast("Товар успішно поповнено", "success");
     } catch (e) {
       console.error("handleRefillSingle error:", e);
-      showToast("Помилка під час поповнення товару");
+      showToast("Помилка під час поповнення товару", "error");
     }
   };
 
@@ -179,10 +196,20 @@ const Logistics = () => {
 
   return (
     <section>
-      {toast && <div role="status">{toast}</div>}
+      <Toast
+        message={toast?.message || ""}
+        variant={toast?.variant || "error"}
+        onClose={() => setToast(null)}
+      />
 
       <LogisticsInfo warehouse={warehouse} stores={stores} />
-      <LogisticsGrid stores={stores} onOpen={handleOpenSidebar} onRefill={handleRefillAll} />
+
+      <LogisticsGrid
+        stores={stores}
+        onOpen={handleOpenSidebar}
+        onRefill={handleRefillAll}
+      />
+
       <LogisticsCardSidebar
         isOpen={isSidebarOpen}
         store={selectedStore}
