@@ -14,7 +14,7 @@ function initStore(store) {
 }
 
 const initialState = {
-  byUser: {}, // { [email]: { stores: [...] } }
+  byUser: {},
 };
 
 const storesSlice = createSlice({
@@ -38,7 +38,6 @@ const storesSlice = createSlice({
       state.byUser[userKey].stores = Array.isArray(stores) ? stores : [];
     },
 
-    // Якщо десь у майбутньому захочеш використовувати точкове поповнення через slice:
     refillSingleForUser(state, action) {
       const { userKey, storeId, category, amount } = action.payload;
       if (!userKey) return;
@@ -68,6 +67,21 @@ const storesSlice = createSlice({
       store.accessories = amounts.accessories;
       store.lastRefill = new Date().toLocaleTimeString();
     },
+    setStoreImagesForUser(state, action) {
+      const { userKey, images, baseUrl } = action.payload;
+      if (!userKey || !images) return;
+
+      const bucket = state.byUser[userKey];
+      if (!bucket?.stores?.length) return;
+
+      bucket.stores = bucket.stores.map((s) => {
+        const rel = images[s.id];
+        if (!rel) return s;
+
+        const isAbs = typeof rel === "string" && /^https?:\/\//i.test(rel);
+        return { ...s, image: isAbs ? rel : `${baseUrl}${rel}` };
+      });
+    },
   },
 });
 
@@ -76,6 +90,7 @@ export const {
   updateStoresForUser,
   refillAllForUser,
   refillSingleForUser,
+  setStoreImagesForUser,
 } = storesSlice.actions;
 
 export default storesSlice.reducer;
