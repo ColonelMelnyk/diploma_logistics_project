@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/diploma_logistics_project/static/css/main.51c60835.css",
+    "main.js": "/diploma_logistics_project/static/js/main.c2c670b2.js",
+    "static/js/453.117b0875.chunk.js": "/diploma_logistics_project/static/js/453.117b0875.chunk.js",
+    "static/media/Background_image_1.gif": "/diploma_logistics_project/static/media/Background_image_1.9261a0073f089034dde8.gif",
+    "static/media/bg_image.jpg": "/diploma_logistics_project/static/media/bg_image.64874c3a409ca5ce88e9.jpg",
+    "static/media/slide-2.jpg": "/diploma_logistics_project/static/media/slide-2.e7265acf2ccdce8caadb.jpg",
+    "static/media/slide-4.jpg": "/diploma_logistics_project/static/media/slide-4.91c36b3c3044dbc28ea0.jpg",
+    "static/media/slide-1.jpg": "/diploma_logistics_project/static/media/slide-1.49ff6936e84e36f32f2e.jpg",
+    "static/media/slide-3.jpg": "/diploma_logistics_project/static/media/slide-3.df472d7b1f80c7585501.jpg",
+    "static/media/slide-7.jpg": "/diploma_logistics_project/static/media/slide-7.5cb9d23d453cedd1c176.jpg",
+    "static/media/slide-5.jpg": "/diploma_logistics_project/static/media/slide-5.f7ab51a1771696a94ece.jpg",
+    "static/media/slide-6.jpg": "/diploma_logistics_project/static/media/slide-6.107f0b3dacd304e1e7bd.jpg",
+    "static/media/logo-2.svg": "/diploma_logistics_project/static/media/logo-2.a8ae73e9bb873668e5bc407336e98858.svg",
+    "static/media/twitter.svg": "/diploma_logistics_project/static/media/twitter.1df280e64bdf963c3a36080205e4f908.svg",
+    "index.html": "/diploma_logistics_project/index.html",
+    "static/media/instagram.svg": "/diploma_logistics_project/static/media/instagram.11e4ad5e9de1908c2b6089904f64ec4c.svg",
+    "static/media/facebook.svg": "/diploma_logistics_project/static/media/facebook.1f97d62d0795c960c791473ce2d591f2.svg",
+    "main.51c60835.css.map": "/diploma_logistics_project/static/css/main.51c60835.css.map",
+    "main.c2c670b2.js.map": "/diploma_logistics_project/static/js/main.c2c670b2.js.map",
+    "453.117b0875.chunk.js.map": "/diploma_logistics_project/static/js/453.117b0875.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.51c60835.css",
+    "static/js/main.c2c670b2.js"
+  ]
+}
