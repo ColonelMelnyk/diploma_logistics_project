@@ -14,7 +14,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <BrowserRouter basename="/diploma_logistics_project">
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
           <App />
         </BrowserRouter>
       </PersistGate>
