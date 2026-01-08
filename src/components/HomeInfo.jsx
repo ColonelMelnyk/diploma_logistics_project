@@ -11,7 +11,7 @@ import slide6 from "../images/slides/slide-6.jpg";
 import slide7 from "../images/slides/slide-7.jpg";
 
 const SLIDE_IMAGES = [slide1, slide2, slide3, slide4, slide5, slide6, slide7];
-const AUTOPLAY_MS = 20000;
+const AUTOPLAY_MS = 15000;
 
 const HomeInfo = () => {
   const slides = siteInfoData.slice(0, 7);

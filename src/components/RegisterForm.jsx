@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { register } from "../redux/AuthLogic";
+import { useNavigate } from "react-router-dom";
+import { register, initStoreImagesForUser } from "../redux/AuthLogic";
 import styles from "../styles/RegisterForm.module.css";
 import Toast from "../components/Toast";
 
@@ -9,10 +10,13 @@ export const RegisterForm = () => {
 
   const [openModal, setOpenModal] = useState(true);
   const [toast, setToast] = useState(null);
+  const navigate = useNavigate();
 
   function onCloseModal() {
     setOpenModal(false);
-  }
+    if (window.history.length > 1) navigate(-1);
+    else navigate("/home");
+  };
 
   const showToast = (message, variant = "error") => {
     setToast({ message, variant });
@@ -32,9 +36,20 @@ export const RegisterForm = () => {
     }
 
     try {
-      await dispatch(register({ name, email, password })).unwrap();
+      const data = await dispatch(register({ name, email, password })).unwrap();
+
       form.reset();
       onCloseModal();
+
+      const userKey = data?.user?.email || email;
+
+      dispatch(initStoreImagesForUser({ userKey }))
+        .unwrap()
+        .then(() => {
+        })
+        .catch((err) => {
+          console.error("Init images error:", err);
+        });
     } catch (err) {
       showToast("Не вдалося зареєструвати акаунт. Спробуйте ще раз.", "error");
       console.error("Register error:", err);

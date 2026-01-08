@@ -1,7 +1,7 @@
 import { logIn } from "../redux/AuthLogic";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import styles from "../styles/LoginForm.module.css";
 import Toast from "../components/Toast";
 
@@ -10,10 +10,13 @@ export const LoginForm = () => {
 
   const [openModal, setOpenModal] = useState(true);
   const [toast, setToast] = useState(null);
+  const navigate = useNavigate();
 
   function onCloseModal() {
     setOpenModal(false);
-  }
+    if (window.history.length > 1) navigate(-1);
+    else navigate("/home");
+  };
 
   const showToast = (message, variant = "error") => {
     setToast({ message, variant });
