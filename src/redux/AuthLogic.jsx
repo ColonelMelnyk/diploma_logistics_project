@@ -17,41 +17,14 @@ const REPLICATE_SERVER =
   process.env.REACT_APP_REPLICATE_SERVER || "http://localhost:3001";
 
 export const register = createAsyncThunk(
-  'auth/register',
+  "auth/register",
   async (credentials, thunkAPI) => {
     try {
       const res = await axios.post("/users/signup", credentials);
       setAuthHeader(res.data.token);
 
       const userKey = res.data?.user?.email || credentials.email;
-
       thunkAPI.dispatch(initializeStoresForUser({ userKey }));
-
-      const storesPayload = storeList.map(({ id, name, address }) => ({
-        id,
-        name,
-        address,
-      }));
-
-      const r = await fetch(`${REPLICATE_SERVER}/api/init-store-images`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userKey, stores: storesPayload }),
-      });
-
-      if (r.ok) {
-        const { images } = await r.json();
-
-        thunkAPI.dispatch(
-          setStoreImagesForUser({
-            userKey,
-            images,
-            baseUrl: REPLICATE_SERVER,
-          })
-        );
-      } else {
-        console.warn("[Replicate] init-store-images failed:", await r.text());
-      }
 
       return res.data;
     } catch (error) {
@@ -96,6 +69,44 @@ export const refreshUser = createAsyncThunk(
       setAuthHeader(persistedToken);
       const response = await axios.get('/users/current');
       return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const initStoreImagesForUser = createAsyncThunk(
+  "stores/initStoreImagesForUser",
+  async ({ userKey }, thunkAPI) => {
+    try {
+      const storesPayload = storeList.map(({ id, name, address }) => ({
+        id,
+        name,
+        address,
+      }));
+
+      const r = await fetch(`${REPLICATE_SERVER}/api/init-store-images`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userKey, stores: storesPayload }),
+      });
+
+      if (!r.ok) {
+        const text = await r.text();
+        throw new Error(text || `HTTP ${r.status}`);
+      }
+
+      const { images } = await r.json();
+
+      thunkAPI.dispatch(
+        setStoreImagesForUser({
+          userKey,
+          images,
+          baseUrl: REPLICATE_SERVER,
+        })
+      );
+
+      return true;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
