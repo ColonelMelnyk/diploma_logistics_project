@@ -3,9 +3,9 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import storeList from "../data_storage/StoreData";
 import { initializeStoresForUser, setStoreImagesForUser } from "./StoresSlice";
 
-axios.defaults.baseURL = 'https://connections-api.goit.global/';
+axios.defaults.baseURL = "https://connections-api.goit.global/";
 
-const setAuthHeader = token => {
+const setAuthHeader = (token) => {
   axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 };
 
@@ -33,47 +33,41 @@ export const register = createAsyncThunk(
   }
 );
 
-export const logIn = createAsyncThunk(
-  'auth/login',
-  async (credentials, thunkAPI) => {
-    try {
-      const res = await axios.post('/users/login', credentials);
-      setAuthHeader(res.data.token);
-      return res.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
-
-export const logOut = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
+export const logIn = createAsyncThunk("auth/login", async (credentials, thunkAPI) => {
   try {
-    await axios.post('/users/logout');
-    clearAuthHeader();
+    const res = await axios.post("/users/login", credentials);
+    setAuthHeader(res.data.token);
+    return res.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.message);
   }
 });
 
-export const refreshUser = createAsyncThunk(
-  'auth/refresh',
-  async (_, thunkAPI) => {
-    const state = thunkAPI.getState();
-    const persistedToken = state.auth.token;
-
-    if (persistedToken === null) {
-      return thunkAPI.rejectWithValue('Unable to fetch user');
-    }
-
-    try {
-      setAuthHeader(persistedToken);
-      const response = await axios.get('/users/current');
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
+export const logOut = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
+  try {
+    await axios.post('/users/logout');
+  } catch (error) {
+  } finally {
+    clearAuthHeader();
   }
-);
+});
+
+export const refreshUser = createAsyncThunk("auth/refresh", async (_, thunkAPI) => {
+  const state = thunkAPI.getState();
+  const persistedToken = state.auth.token;
+
+  if (persistedToken === null) {
+    return thunkAPI.rejectWithValue("Unable to fetch user");
+  }
+
+  try {
+    setAuthHeader(persistedToken);
+    const response = await axios.get("/users/current");
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
 
 export const initStoreImagesForUser = createAsyncThunk(
   "stores/initStoreImagesForUser",
@@ -89,6 +83,44 @@ export const initStoreImagesForUser = createAsyncThunk(
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userKey, stores: storesPayload }),
+      });
+
+      if (!r.ok) {
+        const text = await r.text();
+        throw new Error(text || `HTTP ${r.status}`);
+      }
+
+      const { images } = await r.json();
+
+      thunkAPI.dispatch(
+        setStoreImagesForUser({
+          userKey,
+          images,
+          baseUrl: REPLICATE_SERVER,
+        })
+      );
+
+      return true;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const regenerateStoreImagesForUser = createAsyncThunk(
+  "stores/regenerateStoreImagesForUser",
+  async ({ userKey }, thunkAPI) => {
+    try {
+      const storesPayload = storeList.map(({ id, name, address }) => ({
+        id,
+        name,
+        address,
+      }));
+
+      const r = await fetch(`${REPLICATE_SERVER}/api/init-store-images`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userKey, stores: storesPayload, force: true }),
       });
 
       if (!r.ok) {

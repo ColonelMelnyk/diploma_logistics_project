@@ -7,6 +7,7 @@ import { addStoreRefill } from "../redux/LogisticsHistorySlice";
 
 import { STORE_CAPACITY } from "../data_storage/Capacities";
 
+import AccessDenied from "../components/AccessDenied";
 import LogisticsInfo from "../components/LogisticsInfo";
 import LogisticsGrid from "../components/LogisticsGrid";
 import LogisticsCardSidebar from "../components/LogisticsCardSidebar";
@@ -182,15 +183,12 @@ const Logistics = () => {
     }
   };
 
-  if (!isLoggedIn) {
+ if (!isLoggedIn) {
     return (
-      <section className="p-8 text-center text-xl">
-        <h2>Доступ заборонено</h2>
-        <p>
-          Будь ласка, увійдіть у систему, щоб отримати доступ до центру керування
-          логістикою
-        </p>
-      </section>
+      <AccessDenied
+        title="Доступ заборонено"
+        subtitle="Будь ласка, увійдіть у систему, щоб отримати доступ до центру керування логістикою"
+      />
     );
   }
 

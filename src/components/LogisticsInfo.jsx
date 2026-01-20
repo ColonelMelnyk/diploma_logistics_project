@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import selectRefillHistory from "../redux/LogisticsHistorySelectors";
+import { regenerateStoreImagesForUser } from "../redux/AuthLogic";
 import styles from "../styles/LogisticsInfo.module.css";
 
 const MAX = {
@@ -24,17 +25,21 @@ const pct = (value, limit) => {
 const clamp = (n) => Math.max(0, Math.min(100, n));
 
 const LogisticsInfo = ({ warehouse, stores }) => {
+  const dispatch = useDispatch();
+
+  const userKey = useSelector((s) => s.auth?.user?.email || null);
+  const isLoggedIn = useSelector((s) => s.auth?.isLoggedIn || false);
+
   const refillHistory = useSelector(selectRefillHistory);
   const [now, setNow] = useState(Date.now());
+  const [regenBusy, setRegenBusy] = useState(false);
 
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(t);
   }, []);
 
-  const lastStoreRefill = [...refillHistory]
-    .reverse()
-    .find((entry) => entry.type === "store");
+  const lastStoreRefill = [...refillHistory].reverse().find((entry) => entry.type === "store");
 
   const msLeft = (warehouse?.nextArrival ?? 0) - now;
   const minutesLeft = Math.max(0, Math.floor(msLeft / 60000));
@@ -50,7 +55,6 @@ const LogisticsInfo = ({ warehouse, stores }) => {
     : "немає даних";
   const lastDispatchStore = lastStoreRefill ? lastStoreRefill.store : "немає даних";
 
-  // ✅ Таблиця станів магазинів
   const storesStatus = useMemo(() => {
     return (stores ?? []).map((s) => {
       const fillC = pct(s.computers ?? 0, STORE_MAX.computers);
@@ -73,6 +77,29 @@ const LogisticsInfo = ({ warehouse, stores }) => {
       return { id: s.id, name: s.name, avg, kind, label };
     });
   }, [stores]);
+
+  const toast = (message, variant = "success") => {
+    window.dispatchEvent(
+      new CustomEvent("ts:toast", {
+        detail: { message, variant },
+      })
+    );
+  };
+
+  const handleRegenerate = async () => {
+    if (!isLoggedIn || !userKey) return;
+
+    setRegenBusy(true);
+    try {
+      await dispatch(regenerateStoreImagesForUser({ userKey })).unwrap();
+      toast("Зображення перегенеровано", "success");
+    } catch (e) {
+      console.error("Regenerate images error:", e);
+      toast("Помилка регенерації зображень ", "error");
+    } finally {
+      setRegenBusy(false);
+    }
+  };
 
   return (
     <section className={styles.section}>
@@ -191,9 +218,19 @@ const LogisticsInfo = ({ warehouse, stores }) => {
               ))}
             </div>
 
-            <p className={styles.note}>
-              Порожній = 0%, Повний = 100%, інакше — Неповний.
-            </p>
+            <p className={styles.note}>Порожній = 0%, Повний = 100%, інакше — Неповний.</p>
+
+            <div className={styles.actions}>
+              <button
+                type="button"
+                className={`${styles.btn} ${styles.primary}`}
+                disabled={!isLoggedIn || !userKey || regenBusy}
+                onClick={handleRegenerate}
+                title={!isLoggedIn ? "Потрібно увійти в акаунт" : "Перегенерувати зображення магазинів"}
+              >
+                {regenBusy ? "Генерація..." : "Регенерувати зображення"}
+              </button>
+            </div>
           </div>
         </div>
       </div>

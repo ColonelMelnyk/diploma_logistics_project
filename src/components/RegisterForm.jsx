@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { register, initStoreImagesForUser } from "../redux/AuthLogic";
+import { register } from "../redux/AuthLogic";
 import styles from "../styles/RegisterForm.module.css";
 import Toast from "../components/Toast";
 
@@ -16,7 +16,7 @@ export const RegisterForm = () => {
     setOpenModal(false);
     if (window.history.length > 1) navigate(-1);
     else navigate("/home");
-  };
+  }
 
   const showToast = (message, variant = "error") => {
     setToast({ message, variant });
@@ -36,22 +36,14 @@ export const RegisterForm = () => {
     }
 
     try {
-      const data = await dispatch(register({ name, email, password })).unwrap();
-
+      await dispatch(register({ name, email, password })).unwrap();
       form.reset();
       onCloseModal();
-
-      const userKey = data?.user?.email || email;
-
-      dispatch(initStoreImagesForUser({ userKey }))
-        .unwrap()
-        .then(() => {
-        })
-        .catch((err) => {
-          console.error("Init images error:", err);
-        });
     } catch (err) {
-      showToast("Не вдалося зареєструвати акаунт. Спробуйте ще раз.", "error");
+      showToast(
+        "Не вдалося зареєструвати акаунт. Спробуйте ще раз.",
+        "error"
+      );
       console.error("Register error:", err);
     }
   };
@@ -89,13 +81,21 @@ export const RegisterForm = () => {
         <div className={styles.modal}>
           <div className={styles.header}>
             <h3 className={styles.title}>Реєстрація в системі</h3>
-            <button className={styles.closeBtn} type="button" onClick={onCloseModal}>
+            <button
+              className={styles.closeBtn}
+              type="button"
+              onClick={onCloseModal}
+            >
               ✕
             </button>
           </div>
 
           <div className={styles.body}>
-            <form className={styles.form} onSubmit={handleSubmit} autoComplete="off">
+            <form
+              className={styles.form}
+              onSubmit={handleSubmit}
+              autoComplete="off"
+            >
               <div className={styles.field}>
                 <label className={styles.label} htmlFor="name">
                   Логін

@@ -20,7 +20,10 @@ const GENERATED_DIR = path.join(process.cwd(), "generated");
 app.use("/generated", express.static(GENERATED_DIR));
 
 const safe = (s) =>
-  String(s || "").toLowerCase().replace(/[^a-z0-9._-]+/g, "_").slice(0, 80);
+  String(s || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9._-]+/g, "_")
+    .slice(0, 80);
 
 async function exists(p) {
   try {
@@ -67,7 +70,6 @@ async function createSdxlPrediction(prompt) {
     headers: {
       Authorization: `Bearer ${TOKEN}`,
       "Content-Type": "application/json",
-   
     },
     body: JSON.stringify({
       version,
@@ -76,7 +78,7 @@ async function createSdxlPrediction(prompt) {
         width: 768,
         height: 768,
         num_outputs: 1,
-        num_inference_steps: 12,
+        num_inference_steps: 20,
         guidance_scale: 7,
       },
     }),
@@ -89,9 +91,7 @@ async function createSdxlPrediction(prompt) {
   return r.json();
 }
 
-
 async function waitPrediction(prediction) {
-
   let p = prediction;
   while (p.status !== "succeeded" && p.status !== "failed" && p.status !== "canceled") {
     await new Promise((r) => setTimeout(r, 1000));
@@ -106,9 +106,23 @@ async function waitPrediction(prediction) {
   return p;
 }
 
+async function cleanupOldStoreImages(userFolder, storeId) {
+  try {
+    const files = await fs.readdir(userFolder);
+    const prefix = `store_${storeId}`;
+    const toDelete = files.filter(
+      (f) =>
+        (f === `${prefix}.png` || (f.startsWith(`${prefix}_`) && f.endsWith(".png"))) &&
+        !f.includes("..")
+    );
+    await Promise.allSettled(toDelete.map((f) => fs.unlink(path.join(userFolder, f))));
+  } catch {
+  }
+}
+
 app.post("/api/init-store-images", async (req, res) => {
   try {
-    const { userKey, stores } = req.body || {};
+    const { userKey, stores, force } = req.body || {};
     if (!userKey || !Array.isArray(stores) || stores.length === 0) {
       return res.status(400).json({ error: "userKey and stores[] required" });
     }
@@ -122,13 +136,19 @@ app.post("/api/init-store-images", async (req, res) => {
     let cached = 0;
 
     for (const store of stores) {
-      const fileName = `store_${store.id}.png`;
+      const stamp = Date.now();
+      const fileName = force ? `store_${store.id}_${stamp}.png` : `store_${store.id}.png`;
       const outPath = path.join(userFolder, fileName);
 
-      if (await exists(outPath)) {
-        images[store.id] = `/generated/${userFolderName}/${fileName}`;
-        cached++;
-        continue;
+      if (!force) {
+        const fixedPath = path.join(userFolder, `store_${store.id}.png`);
+        if (await exists(fixedPath)) {
+          images[store.id] = `/generated/${userFolderName}/store_${store.id}.png`;
+          cached++;
+          continue;
+        }
+      } else {
+        await cleanupOldStoreImages(userFolder, store.id);
       }
 
       const prompt = buildPrompt(store);
@@ -150,10 +170,12 @@ app.post("/api/init-store-images", async (req, res) => {
       generated++;
     }
 
-    return res.json({ images, meta: { generated, cached } });
+    return res.json({ images, meta: { generated, cached, force: !!force } });
   } catch (e) {
     console.error("init-store-images error:", e);
-    return res.status(500).json({ error: "Image init failed", details: String(e.message || e) });
+    return res
+      .status(500)
+      .json({ error: "Image init failed", details: String(e.message || e) });
   }
 });
 

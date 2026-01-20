@@ -10,6 +10,7 @@ function initStore(store) {
     accessories: Math.floor(STORE_CAPACITY.accessories * 0.6),
     lastSale: null,
     lastRefill: null,
+    image: null,
   };
 }
 
@@ -26,7 +27,10 @@ const storesSlice = createSlice({
       if (!userKey) return;
 
       if (!state.byUser[userKey]) {
-        state.byUser[userKey] = { stores: storeList.map(initStore) };
+        state.byUser[userKey] = {
+          stores: storeList.map(initStore),
+          imagesInitialized: false,
+        };
       }
     },
 
@@ -34,7 +38,10 @@ const storesSlice = createSlice({
       const { userKey, stores } = action.payload;
       if (!userKey) return;
 
-      if (!state.byUser[userKey]) state.byUser[userKey] = { stores: [] };
+      if (!state.byUser[userKey]) {
+        state.byUser[userKey] = { stores: [], imagesInitialized: false };
+      }
+
       state.byUser[userKey].stores = Array.isArray(stores) ? stores : [];
     },
 
@@ -67,6 +74,7 @@ const storesSlice = createSlice({
       store.accessories = amounts.accessories;
       store.lastRefill = new Date().toLocaleTimeString();
     },
+
     setStoreImagesForUser(state, action) {
       const { userKey, images, baseUrl } = action.payload;
       if (!userKey || !images) return;
@@ -78,9 +86,12 @@ const storesSlice = createSlice({
         const rel = images[s.id];
         if (!rel) return s;
 
-        const isAbs = typeof rel === "string" && /^https?:\/\//i.test(rel);
+        const isAbs =
+          typeof rel === "string" && /^https?:\/\//i.test(rel);
         return { ...s, image: isAbs ? rel : `${baseUrl}${rel}` };
       });
+
+      bucket.imagesInitialized = true;
     },
   },
 });

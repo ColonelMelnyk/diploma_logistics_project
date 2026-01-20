@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import HistoryTable from "../components/HistoryTable";
 import selectRefillHistory from "../redux/LogisticsHistorySelectors";
-
+import AccessDenied from "../components/AccessDenied";
 const History = () => {
   useEffect(() => {
     document.title = "TechSpeed — History";
@@ -13,10 +13,10 @@ const History = () => {
 
   if (!isLoggedIn) {
     return (
-      <section>
-        <h2>Доступ заборонено</h2>
-        <p>Будь ласка, увійдіть у систему, щоб переглянути звіт про поповнення.</p>
-      </section>
+      <AccessDenied
+        title="Доступ заборонено"
+        subtitle="Будь ласка, увійдіть у систему, щоб отримати доступ до центру керування логістикою"
+      />
     );
   }
 

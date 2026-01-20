@@ -2,7 +2,7 @@ import { logOut } from "../redux/AuthLogic";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../redux/AuthLogicSelectors";
 import { useNavigate } from "react-router-dom";
-
+import { persistor } from "../redux/Store";
 import styles from "../styles/UserData.module.css";
 
 const UserData = () => {
@@ -20,8 +20,9 @@ const UserData = () => {
       <button
         className={styles.logout}
         type="button"
-        onClick={() => {
+        onClick={async () => {
           dispatch(logOut());
+          await persistor.flush();
           navigate("/home");
         }}
       >

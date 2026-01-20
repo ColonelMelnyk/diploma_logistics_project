@@ -182,15 +182,12 @@
   word-break: break-word;
 }
 
-
 .note {
   margin: 14px 2px 0;
   font-size: 12px;
   color: var(--muted, rgba(255, 255, 255, 0.7));
   opacity: 0.85;
 }
-
-
 
 .storeTable {
   margin-top: 12px;
@@ -203,7 +200,7 @@
 .storeHead,
 .storeRow {
   display: grid;
-  grid-template-columns: 1.35fr 0.7fr 0.9fr; 
+  grid-template-columns: 1.35fr 0.7fr 0.9fr;
   gap: 10px;
   align-items: center;
 }
@@ -294,4 +291,55 @@
 .bad .storeDot {
   background: #ff4d6d;
   box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.16);
+}
+
+
+.actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn {
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 12px;
+
+  font-size: 13px;
+  font-weight: 900;
+
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.10));
+  background: var(--surface, rgba(255, 255, 255, 0.04));
+  color: var(--text, #fff);
+
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, transform 120ms ease;
+}
+
+.btn:hover {
+  border-color: rgba(77, 90, 229, 0.55);
+  background: rgba(77, 90, 229, 0.10);
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.primary {
+  border-color: rgba(77, 90, 229, 0.55);
+  background: var(--accent, #4D5AE5);
+  color: #fff;
+}
+
+.primary:hover {
+  background: #3f4fe0;
+  border-color: #3f4fe0;
 }

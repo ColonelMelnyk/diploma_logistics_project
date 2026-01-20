@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import { initStoreImagesForUser } from "../redux/AuthLogic";
 import { initializeStoresForUser, updateStoresForUser } from "../redux/StoresSlice";
 import { ensureWarehouseForUser, setWarehouseState } from "../redux/WarehouseSlice";
 import { ensureHistoryForUser, addWarehouseRefill } from "../redux/LogisticsHistorySlice";
 import { WAREHOUSE_CAPACITY, STORE_CAPACITY } from "../data_storage/Capacities";
 
-const WAREHOUSE_CYCLE_MS = 5 * 60 * 1000; // 5 хв
-const SALES_CYCLE_MS = 2 * 60 * 1000; // 2 хв
+const WAREHOUSE_CYCLE_MS = 4 * 60 * 1000; // 5 хв
+const SALES_CYCLE_MS = 3 * 60 * 1000; // 2 хв
 
 function initWarehouse() {
   return {
@@ -45,6 +45,8 @@ const LogisticsEngine = () => {
 
   const whTimerRef = useRef(null);
   const salesTimerRef = useRef(null);
+  const imageInitRef = useRef(false);
+
 
   useEffect(() => {
     warehouseRef.current = warehouse;
@@ -65,6 +67,26 @@ const LogisticsEngine = () => {
       console.error("LogisticsEngine init error:", e);
     }
   }, [dispatch, isLoggedIn, userKey]);
+
+  useEffect(() => {
+  if (!isLoggedIn || !userKey) return;
+
+  const currentStores = storesRef.current;
+  if (!currentStores || currentStores.length === 0) return;
+
+  const alreadyHasImages = currentStores.every((s) => s.image);
+  if (alreadyHasImages) return;
+
+  if (imageInitRef.current) return;
+  imageInitRef.current = true;
+
+  dispatch(initStoreImagesForUser({ userKey }))
+    .unwrap()
+    .catch((err) => {
+      console.error("Init store images failed:", err);
+      imageInitRef.current = false;
+    });
+}, [dispatch, isLoggedIn, userKey]);
 
   const refillWarehouse = () => {
     try {
@@ -98,7 +120,7 @@ const LogisticsEngine = () => {
 
       for (let key of ["computers", "phones_tablets", "accessories"]) {
         const cap = WAREHOUSE_CAPACITY[key];
-        const inc = Math.floor(cap * (randomPercent(10, 20) / 100));
+        const inc = Math.floor(cap * (randomPercent(20, 35) / 100));
 
         const before = newWarehouse[key];
         newWarehouse[key] = Math.min(before + inc, cap);
@@ -138,17 +160,17 @@ const LogisticsEngine = () => {
         computers: Math.max(
           0,
           s.computers -
-            Math.floor(STORE_CAPACITY.computers * (randomPercent(5, 15) / 100))
+            Math.floor(STORE_CAPACITY.computers * (randomPercent(5, 10) / 100))
         ),
         phones_tablets: Math.max(
           0,
           s.phones_tablets -
-            Math.floor(STORE_CAPACITY.phones_tablets * (randomPercent(5, 15) / 100))
+            Math.floor(STORE_CAPACITY.phones_tablets * (randomPercent(5, 10) / 100))
         ),
         accessories: Math.max(
           0,
           s.accessories -
-            Math.floor(STORE_CAPACITY.accessories * (randomPercent(5, 15) / 100))
+            Math.floor(STORE_CAPACITY.accessories * (randomPercent(5, 10) / 100))
         ),
         lastSale: new Date().toLocaleTimeString(),
       }));
